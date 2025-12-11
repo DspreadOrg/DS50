@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a demo application for the DS50 payment terminal, built on the RDA 8910 chipset. The application provides a complete payment solution with support for:
+This is a demo application for the DS50 payment terminal. The application provides a complete payment solution with support for:
 
 - Card payments (EMV chip and magnetic stripe)
 - QR code transactions (both static and dynamic)
@@ -40,11 +40,9 @@ This is a demo application for the DS50 payment terminal, built on the RDA 8910 
 
 ## Hardware Platform
 
-- **Chipset**: RDA 8910
-- **Architecture**: ARM Cortex-A5
-- **Flash Memory**: Embedded flash storage
+- **File system**: Embedded file system
 - **Connectivity**: WiFi, optional cellular module
-- **Display**: LCD interface
+- **Display**: Lvgl interface
 - **Audio**: Built-in speaker and microphone
 - **Card Reader**: EMV chip reader, magnetic stripe reader
 
@@ -99,8 +97,8 @@ This is a demo application for the DS50 payment terminal, built on the RDA 8910 
 1. Double-click [Build.bat](Build.bat) to compile the application
 2. The build output will be generated in `out/appimage_debug/hex/`
 3. The main output files are:
-   - `S20_app.img` - Application image
-   - `S20_app.pac` - Packaged firmware file
+   - `DS50_app.img` - Application image
+   - `DS50_app.pac` - Packaged firmware file
 
 ### Build Process
 
@@ -130,13 +128,7 @@ Network configuration can be adjusted in the source code:
 - Server URLs for payment processing
 - MQTT broker settings
 
-### Merchant Parameters
-
-Merchant-specific parameters are configured in:
-
-- Merchant ID
-- Terminal ID
-- API endpoints
+# 
 
 ## Development Guidelines
 
