@@ -1,8 +1,0 @@
-./vlrsign --pw 12345678 --pn sunyard --ha Blake2 --img fdl1.img --out fdl1_sign.img
-./vlrsign --pw 12345678 --pn sunyard --ha Blake2 --img fdl2.img --out fdl2_signed.img
-./vlrsign --pw 12345678 --pn sunyard --plen 0xbce0 --ha Blake2 --img boot.img --out boot_sign.img
-./vlrsign --pw 12345678 --pn sunyard --ha Blake2 --img L610_CN_66_32_XINYADA.img --out L610_CN_66_32_XINYADA_sign.img
-
-./vlrsign --pw 12345678 --pn sunyard --ha Blake2 --img fdl1.img --out fdl1_signed.img 
-./vlrsign --pw 12345678 --pn sunyard --ha Blake2 --img fdl2.img --out fdl2_signed.img
-./vlrsign --pw 12345678 --pn sunyard --ha Blake2 --img S20_app.img --out S20_app_sign.img
