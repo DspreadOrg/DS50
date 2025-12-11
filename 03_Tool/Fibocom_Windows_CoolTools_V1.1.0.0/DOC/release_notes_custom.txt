@@ -1,0 +1,103 @@
+2022-07-22
+1. 8910蓝屏dump不再依赖elf文件;
+2. coolwatcher启动后，trace插件处于打开状态(无需再点击菜单Plugins->Active Tracer);
+3. 新增cmm generate功能(Tools->Cmm Generate);
+4. 新增log统计功能(Tracer->Show/Hide->TraceStatistics);
+5. 更新traceid文件;
+
+2022-04-20
+1. 优化蓝屏dump、forcepanic功能;
+2. 统一assert文件内容及格式；
+3. 更新traceid文件;
+
+2021-10-27
+1. update trace id DB；
+2. 更新用户手册；
+
+2021-08-31
+1.回放trace：增加Load Trace(bin USB)方式 (Bug1684540);
+2.回放trace：解决加载文件时文件夹定位不准确的问题；
+3.回放Trace：当二进制文件包含时间戳信息或者个别trace包含时间信息时，
+             工具支持以该时间为basetime，Trace输出框中显示相对准确的时间信息。
+4.如果菜单对应功能不适用于某个平台，该平台使用该菜单时，给出错误提示信息;
+
+2020-07-09
+1. 增加coolwatcher_usb.exe；
+2. coolwatcher.exe  改名为coolwatcher_debughost.exe；
+3. 更新用户手册；
+
+2020-06-30
+1. 重新实现json文件的解析函数；
+
+2020-05-18
+1. 保存的串口数据 间隔超过1s时，插入时间戳；
+2. 更新用户手册；
+
+2020-04-25
+1. 利用二进制文件回放trace时，coolwatcher可以识别并单独保存pcap包；
+2. trace插件可解析包含日期信息的时间戳；
+
+
+2020-03-04
+1. 增加对bt risc_v log和bt ap log的支持；
+2  增加过滤无效trace功能；
+3. 更新用户手册；
+
+
+2020-01-03
+1. 解决linux系统中，保存ini文件没有扩展名的问题；
+
+2019-12-31
+2. 解决dump 个别item失败问题；
+
+2019-10-15
+用户手册中增加 8910 usb用法说明
+
+2019-08-29
+1. 修改poweroff按钮无效问题；
+2. 6760 增加elffastdump指令，支持'uart'口输出trace并dump flash；
+
+2019-08-05
+1. 解决蓝屏导出概率性重复dump的问题；
+
+2019-07-25
+1. 解决help菜单项Command Help和User Guide无法使用的问题；
+2. 按新模块更新用户手册。
+
+2019-07-21
+1. 增加对8909L AB flash支持；
+
+
+2019-06-28
+1.elfdump过程中产生的bin文件与elf文件存放到同一个文件夹中
+2. 支持板子热插拔。
+
+2019-05-28
+1.解决特殊情况下蓝屏导出中断的问题。
+dump 0x8800000为起始地址的crash数据，范围太大，特殊情况下，0x08801000~0x08810000中的某个或某些寄存器不能读取，而导致dump中断
+
+2019-05-10
+1.蓝屏导出界面上增加STUB_PERI check box，如果不选择时，工具不会切换temp mode；
+2.暂时去掉ZSP的蓝屏导出功能；
+3.修改蓝屏导出log文件问题： 导出界面不关系的情况下，多次dump操作的log文件会保存在一个文件中；
+
+2018-03-12
+1.trace增加了0xc9 log的解析；
+2.增加8909 U02 ramrun文件；（仅适用于U02芯片）
+
+2018-01-27
+1.增加RegisterViewer工具；
+2.Register Watcher ：增加寄存器保存功能；
+3.GDB Laucher：增加xcpu-rom启动模式；
+4.增加xcvRead 和xcvWrite命令，用于死机后读写xcv寄存器；
+5.解决Tracer插件bug：loadSetting操作，选择的文件路径不能包含中文。
+
+2017-10-13
+1.支持双boot；
+2.解决tracer插件loadSetting时，文件不能包含中文路径的问题；
+3.更新8910 XML；
+
+2017-09-16
+解决部分tracer item解析/显示失败的问题
+
+

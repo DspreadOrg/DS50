@@ -1,0 +1,3 @@
+!!! CP PANIC: , cp svn version: 0xdb15(56085)
+!!! BLUE SCREEN pc/0x00800662 lr/0x00800663 sp/0x80c3fb10 cpsr/0x000f01d1 spsr/0x000f00bf
+********CP ASSERT********

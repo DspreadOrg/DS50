@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<profile>
+<softDir>chipgen/Modem2G</softDir>
+<project>8809 for [CT8851]</project>
+<mainScript>CoolWatcher/cwuser.rb</mainScript>
+<hardXmd>chipgen/Modem2G/toolpool/map/8910/8910m_hard.xml</hardXmd>
+<softXmd>chipgen/Modem2G/toolpool/map/8910/8910_soft_pkg.xmd</softXmd>
+<autoRunTracer>1</autoRunTracer>
+<chipDie>8910</chipDie>
+<elfdumpSetting>chipgen/Modem2G/toolpool/map/elfdump/8910.xml</elfdumpSetting>
+<lastBlueScreenDumpDirName>BlueScreen</lastBlueScreenDumpDirName>
+<lastBlueScreenDumpMode>STUB_PERI</lastBlueScreenDumpMode>
+<lastElfFileName>G:/A_chip/8910/lod/8910C_catm/8910C_catm_em610_V1.elf</lastElfFileName>
+<lastLodForRomburn></lastLodForRomburn>
+<lastcomport>95</lastcomport>
+<pathToGDB>../cygwin/coolgdb/bin</pathToGDB>
+<restartAfterCrashDump>0</restartAfterCrashDump>
+<tracerSetting>rbbase/common/plugins/tracer/default2g.ini</tracerSetting>
+</profile>

@@ -1,0 +1,407 @@
+<collection elfdump="8850">
+   <sram title="psram">
+      <base>0x80000000</base>
+      <size>0x01000000</size>
+      <rom>psram.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="bootrom">
+      <base>0x00000000</base>
+      <size>0x10000</size>
+      <rom>bootrom.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="sysram">
+      <base>0x00800000</base>
+      <size>0x78000</size>
+      <rom>sysram.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="bbsram">
+      <base>0x40080000</base>
+      <size>0x20000</size>
+      <rom>bbsram.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+    <sram title="flash">
+      <base>0x60000000</base>   
+      <size> 0x10000</size>            
+      <rom>flash.bin</rom>
+      <skip>1</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="riscv">
+      <base>0x50000000</base>
+      <size>0xc000</size>
+      <rom>riscv.bin</rom>
+      <skip>0</skip>
+      <dumpfirst>1</dumpfirst>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="rfreg">
+      <base>0x50030000</base>
+      <size>0x5100</size>
+      <rom>rfreg.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="sysreg">
+      <base>0x50080000</base>
+      <size>0x64</size>
+      <rom>sysreg.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="clkrst">
+      <base>0x50081000</base>
+      <size>0xA8</size>
+      <rom>clkrst.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="monitor">
+      <base>0x50083000</base>
+      <size>0x44</size>
+      <rom>monitor.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="watchdog">
+      <base>0x50084000</base>
+      <size>0x20</size>
+      <rom>watchdog.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="idle">
+      <base>0x50090000</base>
+      <size>0x2a4</size>
+      <rom>idle.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="idleres">
+      <base>0x50094000</base>
+      <size>0x30</size>
+      <rom>idleres.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="pwdctrl">
+      <base> 0x500A0000</base>
+      <size>0xD8</size>
+      <rom>pwdctrl.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="sys_ctrl">
+      <base>0x50100000</base>
+      <size>0x24C</size>
+      <rom>sys_ctrl.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="mailbox">
+      <base>  0x50104000</base>
+      <size>0x67C</size>
+      <rom>mailbox.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="timer3">
+      <base>  0x50105000</base>
+      <size>0x100</size>
+      <rom>timer3.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="analog">
+      <base>0x50109000</base>
+      <size>0x23C</size>
+      <rom>analog.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="aon_ifc">
+      <base>0x5010a004</base>
+      <size>0x44</size>
+      <rom>aon_ifc.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="iomux">
+      <base>0x5010c000</base>
+      <size>0x178</size>
+      <rom>iomux.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="pmic">
+      <base>0x50308000</base>
+      <size>0x1000</size>
+      <rom>pmic.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="irq">
+      <base>0x08800000</base>
+      <size>0x200</size>
+      <rom>irq.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="irq1">
+      <base>0x08800800</base>
+      <size>0x4C</size>
+      <rom>irq1.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="timer1">
+      <base>0x08808000</base>
+      <size>0x100</size>
+      <rom>timer1.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="timer2">
+      <base>0x08809000</base>
+      <size>0x100</size>
+      <rom>timer2.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="timer4">
+      <base>0x0880E000</base>
+      <size>0x100</size>
+      <rom>timer4.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="ap_ifc">
+      <base>0x0880f004</base>
+      <size>0x94</size>
+      <rom>ap_ifc.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="sci1">
+      <base>0x08814000</base>
+      <size>0x100</size>
+      <rom>sci1.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="sci2">
+      <base>0x08815000</base>
+      <size>0x100</size>
+      <rom>sci2.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="f8">
+      <base>0x09000000</base>
+      <size>0x200</size>
+      <rom>f8.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>   
+   <sram title="axidma">
+      <base>0x090c0000</base>
+      <size>0x400</size>
+      <rom>axidma.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="risvcram">
+      <base>0x10040000</base>
+      <size>0xA000</size>
+      <rom>risvcram.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+      <pwrctrl  name="WCN">
+           <needon>1</needon> 
+           <ctrl addr="0x500A0018" bits="1" onvalue="1" />
+           <stat addr="0x500A0034" onvalue="0x03" offvalue="0x02"/>
+       </pwrctrl >
+   </sram>
+    <sram title="risvcem">
+      <base>0x14110000</base>
+      <size>0x6000</size>
+      <rom>risvcem.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="txrx">
+      <base>0x25000000</base>
+      <size>0x20000</size>
+      <rom>txrx.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+	   <pwrctrl  name="LTE">
+            <needon>1</needon> 
+            <ctrl addr="0x500A000C" bits="1" enablevalue="1" />
+	        <stat addr="0x500A0028" onvalue="0x03" offvalue="0x02"/>
+      </pwrctrl >
+   </sram>
+   <sram title="rfad">
+      <base>0x25100000</base>
+      <size>0x3000</size>
+      <rom>rfad.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="coeff">
+      <base>0x25200000</base>
+      <size>0x200</size>
+      <rom>coeff.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="ldtc">
+      <base>0x25300000</base>
+      <size>0x24000</size>
+      <rom>ldtc.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="otdoa">
+      <base>0x25400000</base>
+      <size>0x00060000</size>
+      <rom>otdoa.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="measpwr">
+      <base>0x25500000</base>
+      <size>0xA0000</size>
+      <rom>measpwr.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="iddet">
+      <base>0x25600000</base>
+      <size>0xc000</size>
+      <rom>iddet.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="uldft">
+      <base>0x25700000</base>
+      <size>0x3400</size>
+      <rom>uldft.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="pusch">
+      <base>0x25800000</base>
+      <size>0x38000</size>
+      <rom>pusch.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="ulpcdci">
+      <base>0x25900000</base>
+      <size>0x200</size>
+      <rom>ulpcdci.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="dlfft">
+      <base>0x25a00000</base>
+      <size>0x16000</size>
+      <rom>dlfft.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="csirs">
+      <base>0x25b00000</base>
+      <size>0x0000d000</size>
+      <rom>csirs.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="ldtc1">
+      <base>0x26000000</base>
+      <size>0x00700200</size>
+      <rom>ldtc1.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="corr">
+      <base>0x26000800</base>
+      <size>0x1c</size>
+      <rom>corr.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="rxcap">
+      <base>0x27000000</base>
+      <size>0x00017000</size>
+      <rom>rxcap.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+   <sram title="bbapb">
+      <base>0x40000000</base>
+      <size>0x20000</size>
+      <rom>bbapb.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+	  <pwrctrl  name="GGE">
+           <needon>1</needon> 
+           <ctrl addr="0x500A0010" bits="1" enablevalue="1" />
+           <stat addr="0x500A002C" onvalue="0x03" offvalue="0x02"/>
+      </pwrctrl >
+   </sram>
+   <sram title="bcpubrom">
+      <base>0x400A0000</base>
+      <size>0x30000</size>        
+      <rom>bcpubrom.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+   </sram>
+  <sram title="zaxidma">
+      <base>0x22000000</base>
+      <size>0x400</size>
+      <rom>zaxidma.bin</rom>
+      <skip>0</skip>
+      <comments>"size in bytes"</comments>
+      <pwrctrl  name="ZSP">
+          <needon>1</needon> 
+          <needcoderun>0</needcoderun> 
+          <ctrl addr="0x500A0008" bits="1" enablevalue="1" />
+          <stat addr="0x500A0024" onvalue="0x03" offvalue="0x02"/>
+      </pwrctrl >
+   </sram>
+   <sram title="zitcm">
+      <base>0x21400000</base>
+      <size>0x4000</size>
+      <rom>zitcm.bin</rom>
+      <skip>1</skip>
+      <comments>"size in bytes"</comments>
+      <pwrctrl  name="ZSP">
+          <needon>1</needon> 
+          <needcoderun>1</needcoderun> 
+          <ctrl addr="0x500A0008" bits="1" enablevalue="1" />
+          <stat addr="0x500A0024" onvalue="0x03" offvalue="0x02"/>
+      </pwrctrl >
+   </sram>
+   <sram title="zdtcm">
+      <base>0x21500000</base>
+      <size>0x4000</size>
+      <rom>zdtcm.bin</rom>
+      <skip>1</skip>
+      <comments>"size in bytes"</comments>
+	  <pwrctrl  name="ZSP">
+	      <needon>1</needon> 
+          <needcoderun>1</needcoderun> 
+          <ctrl addr="0x500A0008" bits="1" enablevalue="1" />
+          <stat addr="0x500A0024" onvalue="0x03" offvalue="0x02"/>
+      </pwrctrl >
+   </sram>
+</collection>

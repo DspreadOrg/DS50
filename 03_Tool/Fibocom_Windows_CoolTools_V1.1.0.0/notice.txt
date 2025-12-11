@@ -1,0 +1,680 @@
+文件列表如下
+
+/qt.conf
+/Qt3Support4.dll
+/QtCore4.dll
+/QtGui4.dll
+/QtNetwork4.dll
+/QtOpenGL4.dll
+/QtSerialPort.dll
+/QtSql4.dll
+/QtXml4.dll
+/QtSvg4.dll
+/plugins/imageformats/qgif4.dll
+/plugins/imageformats/qico4.dll
+/plugins/imageformats/qjpeg4.dll
+/plugins/imageformats/qmng4.dll
+/plugins/imageformats/qsvg4.dll
+/plugins/imageformats/qtga4.dll
+/plugins/imageformats/qtiff4.dll
+/plugins/iconengines/qsvgicon4.dll
+/msvcp100.dll
+/msvcr100.dll
+/coolhost_library.dll
+/libelf.dll
+/libusb0.dll
+/msvcr100-ruby18.dll
+/romulib.dll
+/cooltrace.dll
+
+/coolat.exe
+/coolgdb.exe
+/coolgdb2.exe
+/coolhost.exe
+/coolpkg.exe
+/coolprofile.exe
+/coolwatcher.exe
+/coolwatcher_usb.exe
+/coolxml.exe
+/FLAMulator.exe
+/srecmap.exe
+/srecmapbin.exe
+/xcp2h.exe
+/multitrace.exe
+/mem_bridge_rom_CHIP_drom.lod
+/mem_bridge_rom_CHIP_irom.lod
+
+/DOC/Coolwatcher_User_Guide.pdf
+/DOC/Coolwatcher_User_Guide_En.pdf
+/DOC/CoolAT_User_Guide.pdf
+/DOC/release_notes_custom.txt
+/DOC/coolwatcher.html
+/docpool/*.png
+/docpool/*.gif
+/drivers/
+/lib/
+/resources/*.png
+/resources/*.wav
+/resources/*.mid
+/chipgen/Modem2G/toolpool/changelog.txt
+/chipgen/Modem2G/toolpool/deliv.yaml
+/chipgen/Modem2G/toolpool/findglobals.rb 
+/chipgen/Modem2G/toolpool/makepublicpool.rb 
+/chipgen/Modem2G/toolpool/map/2gTraceDB/traceDb.yaml 
+/chipgen/Modem2G/toolpool/map/8809/8809_hard.xml 
+/chipgen/Modem2G/toolpool/map/8809/8809_soft_pkg.xmd 
+/chipgen/Modem2G/toolpool/map/8809/8809_soft_pkg_with_voc.xmd 
+/chipgen/Modem2G/toolpool/map/8809/8809_soft_root.xmd 
+/chipgen/Modem2G/toolpool/map/8809/8809_soft_root_with_voc.xmd 
+/chipgen/Modem2G/toolpool/map/8809/8955_hard.xml 
+/chipgen/Modem2G/toolpool/map/8809/8955_soft_pkg.xmd
+/chipgen/Modem2G/toolpool/map/8809/traceDb.yaml
+/chipgen/Modem2G/toolpool/map/8909/*.xmd
+/chipgen/Modem2G/toolpool/map/8909/*.xml
+/chipgen/Modem2G/toolpool/map/8909L/*.xmd
+/chipgen/Modem2G/toolpool/map/8909L/*.xml
+/chipgen/Modem2G/toolpool/map/8909L_fpga/*.xmd
+/chipgen/Modem2G/toolpool/map/8909L_fpga/*.xml
+/chipgen/Modem2G/toolpool/map/8910/*.xmd
+/chipgen/Modem2G/toolpool/map/8910/*.xml
+/chipgen/Modem2G/toolpool/map/ChipStd/*.xmd
+/chipgen/Modem2G/toolpool/map/elfdump/*.xml
+/chipgen/Modem2G/toolpool/map/Gallite/*.xml
+/chipgen/Modem2G/toolpool/map/Gallite/*.xmd
+/chipgen/Modem2G/toolpool/plugins/Calib/*.rb
+/chipgen/Modem2G/toolpool/plugins/cwmodem2ggui/*.rb
+/chipgen/Modem2G/toolpool/plugins/fastpf/*.rb
+/chipgen/Modem2G/toolpool/plugins/fastpf/flash_programmers/*_ramrun.lod
+/chipgen/Modem2G/toolpool/plugins/romburn
+/chipgen/Modem2G/toolpool/scripts/8809/*.rb
+/chipgen/Modem2G/toolpool/scripts/8909/*.rb
+/chipgen/Modem2G/toolpool/scripts/8909L/*.rb
+/chipgen/Modem2G/toolpool/scripts/8909L_fpga/*.rb
+/chipgen/Modem2G/toolpool/scripts/ChipStd/*.rb
+/chipgen/Modem2G/toolpool/scripts/Gallite/*.rb
+/chipgen/Modem2G/toolpool/gdbfeatures/*.xml
+/profiles/8910.cwp
+/profiles/8909L.cwp 
+/profiles/8909L_fpga.cwp 
+/profiles/Blank.cwp
+/rbbase/common/abfs.rb
+/rbbase/common/base.rb 
+/rbbase/common/ber.rb 
+/rbbase/common/cmu.rb 
+/rbbase/common/coolhost.rb 
+/rbbase/common/coolhost_connections.rb 
+/rbbase/common/csmail.rb 
+/rbbase/common/eventsniffer.rb 
+/rbbase/common/gpib.rb 
+/rbbase/common/help.rb 
+/rbbase/common/lod.rb 
+/rbbase/common/netutils.rb 
+/rbbase/common/plugins/BufferProfile/*.rb
+/rbbase/common/plugins/disassembly/*.rb
+/rbbase/common/plugins/disassembly/disassemblyplugin.dll
+/rbbase/common/plugins/flamulator/*.rb
+/rbbase/common/plugins/keypad/keypad.dll
+/rbbase/common/plugins/keypad/*.rb
+/rbbase/common/plugins/tracer/*.ini
+/rbbase/common/plugins/tracer/*.rb
+/rbbase/common/plugins/tracer/tracerplugin.dll
+/rbbase/common/setenv.rb
+/rbbase/common/sxs.rb
+/rbbase/common/wavetool.rb
+/rbbase/CoolWatcher/
+/xcp/8808_8809.xcp
+/xcp/8809.xcp
+/xcp/8909.xcp
+/xcp/8910.xcp
+/xcp/defaultconfig.xcp
+/xcp/gallite.xcp
+notice.txt
+
+/*========================================================================
+Notices for file(s):
+
+/QtSerialPort.dll
+/Qt3Support4.dll
+/QtCore4.dll
+/QtGui4.dll
+/QtNetwork4.dll
+/QtOpenGL4.dll
+/QtSql4.dll
+/QtXml4.dll
+/QtSvg4.dll
+/plugins/imageformats/qgif4.dll
+/plugins/imageformats/qico4.dll
+/plugins/imageformats/qjpeg4.dll
+/plugins/imageformats/qmng4.dll
+/plugins/imageformats/qsvg4.dll
+/plugins/imageformats/qtga4.dll
+/plugins/imageformats/qtiff4.dll
+/plugins/iconengines/qsvgicon4.dll
+/libelf.dll
+/libusb0.dll
+/msvcr100-ruby18.dll
+========================================================================
+
+/QtSerialPort.dll
+/****************************************************************************
+**
+** Copyright (C) 2012 Denis Shienkov <denis.shienkov@gmail.com>
+** Copyright (C) 2013 Laszlo Papp <lpapp@kde.org>
+** Contact: http://www.qt-project.org/legal
+**
+** This file is part of the QtSerialPort module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Digia.  For licensing terms and
+** conditions see http://qt.digia.com/licensing.  For further information
+** use the contact form at http://qt.digia.com/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** In addition, as a special exception, Digia gives you certain additional
+** rights.  These rights are described in the Digia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/libelf.dll
+/****************************************************************************
+**Copyright (C) 1995 - 2001 Michael Riepe
+**
+**This library is free software; you can redistribute it and/or
+**modify it under the terms of the GNU Library General Public
+**License as published by the Free Software Foundation; either
+**version 2 of the License, or (at your option) any later version.
+
+**This library is distributed in the hope that it will be useful,
+**but WITHOUT ANY WARRANTY; without even the implied warranty of
+**MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+**Library General Public License for more details.
+
+**You should have received a copy of the GNU Library General Public
+**License along with this library; if not, write to the Free Software
+**Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+**
+****************************************************************************/
+
+/Qt3Support4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the Qt3Support module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+
+/QtCore4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtCore module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/QtGui4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtGui module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/QtNetwork4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtNetwork module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/QtOpenGL4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtOpenGL module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/QtSql4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtSql module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+
+/QtXml4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtXml module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+
+/QtSvg4.dll
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the QtSvg module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+Qt   plugins/imageformats
+/****************************************************************************
+**
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
+**
+** This file is part of the plugins of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see http://www.qt.io/terms-conditions. For further
+** information use the contact form at http://www.qt.io/contact-us.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 or version 3 as published by the Free
+** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+** following information to ensure the GNU Lesser General Public License
+** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** As a special exception, The Qt Company gives you certain additional
+** rights. These rights are described in The Qt Company LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/msvcr100-ruby18.dll
+/****************************************************************************
+**
+**Ruby is copyrighted free software by Yukihiro Matsumoto <matz@netlab.jp>.
+**You can redistribute it and/or modify it under either the terms of the
+**2-clause BSDL (see the file BSDL), or the conditions below:
+**
+**  1. You may make and give away verbatim copies of the source form of the
+**     software without restriction, provided that you duplicate all of the
+**     original copyright notices and associated disclaimers.
+**
+**  2. You may modify your copy of the software in any way, provided that
+**    you do at least ONE of the following:
+**
+**       a) place your modifications in the Public Domain or otherwise
+**          make them Freely Available, such as by posting said
+**	  modifications to Usenet or an equivalent medium, or by allowing
+**	  the author to include your modifications in the software.
+**
+**      b) use the modified software only within your corporation or
+**         organization.
+**
+**       c) give non-standard binaries non-standard names, with
+**          instructions on where to get the original software distribution.
+**
+**       d) make other distribution arrangements with the author.
+**
+**  3. You may distribute the software in object code or binary form,
+**     provided that you do at least ONE of the following:
+**
+**       a) distribute the binaries and library files of the software,
+**	  together with instructions (in the manual page or equivalent)
+**	  on where to get the original distribution.
+**
+**       b) accompany the distribution with the machine-readable source of
+**	  the software.
+**
+**       c) give non-standard binaries non-standard names, with
+**          instructions on where to get the original software distribution.
+**
+**       d) make other distribution arrangements with the author.
+**
+**  4. You may modify and include the part of the software into any other
+**     software (possibly commercial).  But some files in the distribution
+**     are not written by the author, so that they are not under these terms.
+**
+**     For the list of those files and their copying conditions, see the
+**     file LEGAL.
+**
+**  5. The scripts and library files supplied as input to or produced as
+**     output from the software do not automatically fall under the
+**     copyright of the software, but belong to whomever generated them,
+**     and may be sold commercially, and may be aggregated with this
+**     software.
+**
+**  6. THIS SOFTWARE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR
+**     IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+**     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+**     PURPOSE.
+**
+****************************************************************************/
+
+
+/libusb0.dll
+/****************************************************************************
+**This software is distributed under the following licenses:
+**Driver:      GNU General Public License (GPL)
+**Library, Test Files, Installer:    GNU Lesser General Public License (LGPL)
+
+ **                   GNU GENERAL PUBLIC LICENSE
+ **                      Version 3, 29 June 2007
+
+** Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+**Everyone is permitted to copy and distribute verbatim copies
+**of this license document, but changing it is not allowed.
+**
+****************************************************************************/
+
+========================================================================*/
