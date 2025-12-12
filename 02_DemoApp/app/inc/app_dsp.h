@@ -4,6 +4,7 @@
 
 #include "app_card_payment.h"
 #include "dsp_emv.h"
+#include "app_param.h"
 
 #define DSP_FILENAME "/ext/trans_info.bin"
 extern char gShopId[24];
@@ -14,18 +15,7 @@ extern char gQrUrl[256];
 extern char gMchntcnName[32];
 
 
-typedef struct {
-	char traceNo[8];//serial number
-	char batchNo[8];//batch number
-	char transStatus[3];
-	char transTypeId[8];
-	char origOutTradeId[28];
-	char transDatetime[28];
-	char money[12];
-	char cardNo[24];
-	//char mchntcd[24];
-	//char mchntcdDeviceid[24];
-}dsp_tradeInfo_t;
+
 
 
 int app_dsp_getInitFlag(void);

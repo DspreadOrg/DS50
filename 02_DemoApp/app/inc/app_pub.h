@@ -99,7 +99,7 @@ int app_reviseAmount(char* oldAmount, char* newAmount);
 void convertToWords(int num, char* result); 
 int app_money_play(char* amount); 
 unsigned char app_getkey(void);
-
+void Pub_CopyWithPoint(char *src, char *dst);
 int pub_GetNetWorkStatus();
 int Pub_DateConvert(const char* dateStr, 
                    const char* targetFormat, 

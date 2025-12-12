@@ -38,7 +38,7 @@ const char *menuItems[] = {"1.Language", "2.Transaction", "3.Version",
 						   "4.Network", "5.System", "6.Card Pay", "7.LogSwitch"};
 const char *languageMenuItems[] = {"1.English"};
 const char *networkMenuItems[] = {"1.4G", "2.Wifi", "3.Smartphone Input", "4.WiFi firmware update"};
-const char *systemMenuItems[] = {"1.Information", "2.Params Setting", "3.Sign In", "4.Synchronize Time"};
+const char *systemMenuItems[] = {"1.Information", "2.Params Setting", "3.Synchronize Time"};
 const char *ISO8583MenuItems[] = {"1.Sign", "2.Sale", "3.Void", "4.Refund", "5.Balance"};
 const char *logMenuItems[] = {"1.OFF", "2.0N"};
 dsp_tradeInfo_t tradeInfo[5] = {0};
@@ -110,8 +110,7 @@ static const KeyHandler key_handlers[] = {
 
 	{DIGITAL1, MODE_SYSTEM_SETTING, handle_infomation},
 	{DIGITAL2, MODE_SYSTEM_SETTING, handle_param_settings},
-	{DIGITAL3, MODE_SYSTEM_SETTING, handle_sign_in},
-	{DIGITAL4, MODE_SYSTEM_SETTING, handle_sync_time},
+	{DIGITAL3, MODE_SYSTEM_SETTING, handle_sync_time},
 
 	{DIGITAL0, MODE_ANY, handle_digit},
 	{DIGITAL1, MODE_ANY, handle_digit},

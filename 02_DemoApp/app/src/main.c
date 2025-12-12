@@ -118,6 +118,7 @@ void app_main(void* param)
 		app_dsp_play(0, "/ext/audio/english/dsp_netnormal.wav", "Network Connected", 1);
 		app_lvgl_mainShow(DSP_NETWORKSUCC_IMG, 100, 100, "Network Connected", LV_COLOR_DSP_BLUE);
 	}
+//	app_emqx_service_start();
 	larktms_service_start(showTmsState,TMS_FW_HEART_CUSTOM_URL,APP_VERSION);
 	u32 btn_thread_id = 0;
 	OsSysThreadCreate(app_trans_process, "app_trans",

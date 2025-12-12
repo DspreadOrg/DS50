@@ -10,7 +10,7 @@ typedef struct emqx_mqtt_param_t {
 	char topic[64];
 }emqx_mqtt_param_t;
 
-int app_emqx_mqttConnect();
+int app_emqx_service_start();
 int Emqx_Sale(char *emqx_amt);
 void  show_sale_menu();
 #endif

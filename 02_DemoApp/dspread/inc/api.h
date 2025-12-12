@@ -3,7 +3,6 @@
 #include "api_file.h"
 #include "api_log.h"
 #include "api_sys.h"
-#include "api_lcd.h"
 #include "api_keypad.h"
 #include "api_card.h"
 #include "api_uart.h"

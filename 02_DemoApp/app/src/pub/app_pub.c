@@ -292,6 +292,32 @@ int app_reviseAmount(char* oldAmount, char* newAmount)
 	return 0;
 }
 
+void Pub_CopyWithPoint(char *src, char *dst)
+{
+    int sLen = 0;
+
+    sLen = strlen(src);
+    if (sLen == 0)
+    {
+        sprintf(dst, "0.00");
+    }
+    else if (sLen == 1)
+    {
+        sprintf(dst, "0.0%c", src[0]);
+    }
+    else if (sLen == 2)
+    {
+        sprintf(dst, "0.%c%c", src[0], src[1]);
+    }
+    else
+    {
+        memcpy(dst, src, sLen - 2);
+        dst[sLen - 2] = '.';
+        memcpy(dst + sLen - 1, src + sLen - 2, 2);
+        dst[sLen + 1] = 0;
+    }
+}
+
 void convertToWords(int num, char* result) {
 	const char* units[] = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
 	const char* teens[] = { "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
