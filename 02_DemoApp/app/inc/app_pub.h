@@ -27,7 +27,7 @@
 
 #define TRANSRECORD_FILE     "/ext/trans/transrecord"              //Transaction Record File
 
-
+#define PR_ARRAY_SIZE(x)	(sizeof(x)/sizeof(x[0]))
 #define INDEX_SIZE sizeof(int)  //Index size to use for the beginning of the file
 #define MAX_RECORDS 10          //Maximum number of file records
 #define MAX_AMOUNT_LENGTH  8    //Maximum length of amount
@@ -116,4 +116,6 @@ int App_PiccCardPresent();
 int App_PiccCardClose();
 
 void rf_test();
+void Pub_getFomartTime(char *time);
+int Pub_DesCalcData(s32 mode, u8 alg, u32 idx, u8 *pData, u32 dataLen, u8 *pDataOut, u32 *pDataOutLen);
 #endif

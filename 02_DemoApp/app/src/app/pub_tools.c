@@ -101,7 +101,6 @@ int Util_Asc2Bcd(char* AscBuf, char* BcdBuf, int AscLen)
 
 		i++;
 	}
-	//����ַ�������
 	if (nAscLen < AscLen && nAscLen != 0)
 	{
 		memset(pBcd + i, 0xFF, AscLen - i);
@@ -113,13 +112,13 @@ int Util_Asc2Bcd(char* AscBuf, char* BcdBuf, int AscLen)
 
 /**
 * @fn Util_Bcd2Asc
-* @brief  BCD��תASCII��
-* @param in  BcdBuf      �����ת����BCD������
-* @param in  AscLen         ASCII�����ݳ��ȣ���BCD�����ݵ�˫������
-* @param out  AscBuf      ת�������ASCII������
+* @brief  BCD2SCII�
+* @param in  BcdBuf      
+* @param in  AscLen         
+* @param out  AscBuf      
 * @return
-* @li  UUTIL_SUCCESS        =  0			�ɹ�
-* @li  UUTIL_FAIL           	   = -1,       		ʧ��
+* @li  UUTIL_SUCCESS        =  0			
+* @li  UUTIL_FAIL           	   = -1,       	
 */
 int Util_Bcd2Asc(char* BcdBuf, char* AscBuf, int AscLen)
 {
@@ -128,7 +127,6 @@ int Util_Bcd2Asc(char* BcdBuf, char* AscBuf, int AscLen)
 	const unsigned char* pBcd = BcdBuf;
 	char* pAsc = AscBuf;
 
-	//AscLen����Ϊ�����򱨴�
 	if ((pAsc == NULL) || (pBcd == NULL) || (AscLen < 0))
 		return APP_FAIL;
 
@@ -139,7 +137,7 @@ int Util_Bcd2Asc(char* BcdBuf, char* AscBuf, int AscLen)
 		ch = pBcd[i] & 0x0F;
 		pAsc[i * 2 + 1] = (ch > 9) ? ch + 0x41 - 10 : ch + 0x30;
 	}
-	if (AscLen % 2)//������Ϊ����ʱ�账��
+	if (AscLen % 2)//
 	{
 		ch = (pBcd[i] & 0xF0) >> 4;
 		pAsc[i * 2] = (ch > 9) ? ch + 0x41 - 10 : ch + 0x30;
@@ -152,20 +150,7 @@ int Util_Bcd2Asc(char* BcdBuf, char* AscBuf, int AscLen)
 	return APP_SUCC;
 }
 /*******************************************************************************
-*��������: Util_Int2Bcd
-*��������: int������ת��ΪBCD��
-		   �ҿ�BCD�룬λ��������0
-*����˵��:
-	�������: IntData:   ��ת����int������
-			  BcdLen��   ת����BCD�����ݳ���
 
-	  �������: BcdBuf��   ת����BCD����
-
-*�� �� ֵ: UUTIL_FAIL           = -1,       //ʧ��
-		   UUTIL_SUCCESS        =  0        //�ɹ�
-*��ʷ��¼:
-*��    ��: 13.08.01		�޸���:
-*��    ��: ����
 *******************************************************************************/
 int Util_Int2Bcd(unsigned int IntData, char* BcdBuf, int BcdLen)
 {
@@ -210,7 +195,6 @@ int Sys_DisplayLine(unsigned char ucLine, unsigned char* strMsg, unsigned char u
 
 unsigned char Sys_GetKey(int nTimeOut);
 
-// ������
 typedef struct
 {
 	unsigned char XCode;             // ������

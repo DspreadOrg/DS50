@@ -248,5 +248,7 @@ int Emv_GetKernelVersion(EmvKernelType kernelType,unsigned char *ver);
 //feturn: 0 succes  OTHER fail
  */
 int Emv_SetOnlineResult(PollCardMode mode,EmvOnlineData_t* pOnlineData);
+
+int Emv_AidPramAndCapkExist(void);
 #endif
 

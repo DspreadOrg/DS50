@@ -1219,28 +1219,41 @@ void app_transaction_recordShow(dsp_tradeInfo_t *tradeInfo, int size)
 	lv_obj_t *transTypeldLab = lv_label_create(bgObj, tarceNoLab);
 	lv_label_set_long_mode(transTypeldLab, LV_LABEL_LONG_BREAK);
 	lv_obj_set_width(transTypeldLab, 120);
-	lv_label_set_text(transTypeldLab, "TransType:");
+	lv_label_set_text(transTypeldLab, "AuthCode:");
 	lv_obj_align(transTypeldLab, bgObj, LV_ALIGN_IN_TOP_LEFT, 5, 14 + 24 * 3);
 
 	lv_obj_t *transTypeldVer = lv_label_create(bgObj, tarceNoLab);
 	lv_label_set_long_mode(transTypeldVer, LV_LABEL_LONG_BREAK);
 	lv_obj_set_width(transTypeldVer, 115);
-	lv_label_set_text(transTypeldVer, ptradeInfo->transTypeId);
+	lv_label_set_text(transTypeldVer, ptradeInfo->acqAuthCode);
 	lv_label_set_align(transTypeldVer, LV_LABEL_ALIGN_RIGHT);
 	lv_obj_align(transTypeldVer, bgObj, LV_ALIGN_IN_TOP_LEFT, 120, 14 + 24 * 3);
 
 	///////////////////////////////////////
-	lv_obj_t *outTradeldLab = lv_label_create(bgObj, tarceNoLab);
-	lv_label_set_long_mode(outTradeldLab, LV_LABEL_LONG_BREAK);
-	lv_obj_set_width(outTradeldLab, 120);
-	lv_label_set_text(outTradeldLab, "OutTradeld:");
-	lv_obj_align(outTradeldLab, bgObj, LV_ALIGN_IN_TOP_LEFT, 5, 14 + 24 * 4);
-	lv_obj_t *outTradeldVer = lv_label_create(bgObj, tarceNoLab);
-	lv_label_set_long_mode(outTradeldVer, LV_LABEL_LONG_BREAK);
-	lv_obj_set_width(outTradeldVer, 115);
-	lv_label_set_text(outTradeldVer, ptradeInfo->origOutTradeId);
-	lv_label_set_align(outTradeldVer, LV_LABEL_ALIGN_RIGHT);
-	lv_obj_align(outTradeldVer, bgObj, LV_ALIGN_IN_TOP_LEFT, 120, 14 + 24 * 4);
+	lv_obj_t *CardOrg = lv_label_create(bgObj, tarceNoLab);
+	lv_label_set_long_mode(CardOrg, LV_LABEL_LONG_BREAK);
+	lv_obj_set_width(CardOrg, 120);
+	lv_label_set_text(CardOrg, "CardOrg:");
+	lv_obj_align(CardOrg, bgObj, LV_ALIGN_IN_TOP_LEFT, 5, 14 + 24 * 4);
+	lv_obj_t *CardOrgVer = lv_label_create(bgObj, tarceNoLab);
+	lv_label_set_long_mode(CardOrgVer, LV_LABEL_LONG_BREAK);
+	lv_obj_set_width(CardOrgVer, 115);
+	lv_label_set_text(CardOrgVer, ptradeInfo->cardOrg);
+	lv_label_set_align(CardOrgVer, LV_LABEL_ALIGN_RIGHT);
+	lv_obj_align(CardOrgVer, bgObj, LV_ALIGN_IN_TOP_LEFT, 120, 14 + 24 * 4);
+
+		///////////////////////////////////////
+	lv_obj_t *CardNo = lv_label_create(bgObj, tarceNoLab);
+	lv_label_set_long_mode(CardNo, LV_LABEL_LONG_BREAK);
+	lv_obj_set_width(CardNo, 120);
+	lv_label_set_text(CardNo, "CardNo:");
+	lv_obj_align(CardNo, bgObj, LV_ALIGN_IN_TOP_LEFT, 5, 14 + 24 * 5);
+	lv_obj_t *CardNoVer = lv_label_create(bgObj, tarceNoLab);
+	lv_label_set_long_mode(CardNoVer, LV_LABEL_LONG_BREAK);
+	lv_obj_set_width(CardNoVer, 115);
+	lv_label_set_text(CardNoVer, ptradeInfo->cardNo);
+	lv_label_set_align(CardNoVer, LV_LABEL_ALIGN_RIGHT);
+	lv_obj_align(CardNoVer, bgObj, LV_ALIGN_IN_TOP_LEFT, 120, 14 + 24 * 5);
 	///////////////////////////////////////
 	lv_obj_t *transDatetimeLab = lv_label_create(bgObj, tarceNoLab);
 	lv_label_set_long_mode(transDatetimeLab, LV_LABEL_LONG_BREAK);
@@ -1250,13 +1263,8 @@ void app_transaction_recordShow(dsp_tradeInfo_t *tradeInfo, int size)
 	lv_obj_t *transDatetimeVer = lv_label_create(bgObj, tarceNoLab);
 	lv_label_set_long_mode(transDatetimeVer, LV_LABEL_LONG_BREAK);
 	lv_obj_set_width(transDatetimeVer, 130);
-	ret = sscanf(ptradeInfo->transDatetime, "%04d-%02d-%02d %02d:%02d:%02d", &year, &month, &day, &hour, &min, &sec);
-	if (ret == 6)
-	{
-		memset(buf, 0, sizeof(buf));
-		sprintf(buf, "%04d/%02d/%02d %02d:%02d", year, month, day, hour, min);
-	}
-	lv_label_set_text(transDatetimeVer, buf);
+
+	lv_label_set_text(transDatetimeVer, ptradeInfo->transDatetime);
 	lv_label_set_align(transDatetimeVer, LV_LABEL_ALIGN_RIGHT);
 	lv_obj_align(transDatetimeVer, bgObj, LV_ALIGN_IN_TOP_LEFT, 105, 14 + 24 * 6);
 
@@ -1264,15 +1272,13 @@ void app_transaction_recordShow(dsp_tradeInfo_t *tradeInfo, int size)
 	lv_obj_t *transMoneyLab = lv_label_create(bgObj, tarceNoLab);
 	lv_label_set_long_mode(transMoneyLab, LV_LABEL_LONG_BREAK);
 	lv_obj_set_width(transMoneyLab, 120);
-	lv_label_set_text(transMoneyLab, "TransMoney:");
+	lv_label_set_text(transMoneyLab, "TransAmount:");
 	lv_obj_align(transMoneyLab, bgObj, LV_ALIGN_IN_TOP_LEFT, 5, 14 + 24 * 7);
 
 	lv_obj_t *transMoneyVer = lv_label_create(bgObj, tarceNoLab);
 	lv_label_set_long_mode(transMoneyVer, LV_LABEL_LONG_BREAK);
 	lv_obj_set_width(transMoneyVer, 115);
-	memset(buf, 0, sizeof(buf));
-	sprintf(buf, "%d.%02d", atoi(ptradeInfo->money) / 100, atoi(ptradeInfo->money) % 100);
-	lv_label_set_text(transMoneyVer, buf);
+	lv_label_set_text(transMoneyVer, ptradeInfo->money);
 	lv_label_set_align(transMoneyVer, LV_LABEL_ALIGN_RIGHT);
 	lv_obj_align(transMoneyVer, bgObj, LV_ALIGN_IN_TOP_LEFT, 120, 14 + 24 * 7);
 

@@ -67,14 +67,16 @@ void app_main(void* param)
 	lcdType = true;
 	memset(serialID,0,sizeof(serialID));
 	memset(tsn,0,sizeof(tsn));
-	memset(tusn,0,sizeof(tusn));	
+	memset(tusn,0,sizeof(tusn));
+	
+	loadResource();
+
 	app_reg_iconEvent();
 	app_trans_init();
 	EmvL2_Init();
-
 	App_PosParamInit();
 	
-	loadResource();
+
 	ret = OsSysReadSn(tsn,&tsnlen,tusn,&tusnlen);
 	API_LOG_DEBUG("tms tsn=[%s],tusn=[%s]",tsn,tusn);
 	if(strlen(tusn) == 0)
@@ -118,7 +120,7 @@ void app_main(void* param)
 		app_dsp_play(0, "/ext/audio/english/dsp_netnormal.wav", "Network Connected", 1);
 		app_lvgl_mainShow(DSP_NETWORKSUCC_IMG, 100, 100, "Network Connected", LV_COLOR_DSP_BLUE);
 	}
-//	app_emqx_service_start();
+	app_emqx_service_start();
 	larktms_service_start(showTmsState,TMS_FW_HEART_CUSTOM_URL,APP_VERSION);
 	u32 btn_thread_id = 0;
 	OsSysThreadCreate(app_trans_process, "app_trans",
@@ -154,7 +156,6 @@ void* appimg_enter(void* param)
 	OsKeypadSetMode(1);
 	lv_drv_init();
 	OsAudioTtsSetSpeed(5000);
-	rpc_protocol_task();
 	mutex_lvgl = OsSysMutexCreate();
 	MainStatus=0;
 	if(create_thread("app_main", app_main, 1024 * 100, 

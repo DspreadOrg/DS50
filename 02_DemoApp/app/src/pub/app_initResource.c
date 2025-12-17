@@ -34,6 +34,9 @@ void loadResource() {
 	if (!OsFileExistDir("/ext/key")) {
 		OsFileMkdir("/ext/key");
 	}
+	if (!OsFileExistDir("/ext/cust")) {
+		OsFileMkdir("/ext/cust");
+	}
 
 	if (OsFileExist(MP3_RESOURCE_LOAD_PATH)==1) {
 		ret=OsFileUnzip(MP3_RESOURCE_LOAD_PATH, "/ext/audio");
@@ -54,9 +57,11 @@ void loadResource() {
 		API_LOG_DEBUG("OsFileUnzip %s ret:%d", CERT_RESOURCE_LOAD_PATH, ret);
 		ret = OsFileRemove(CERT_RESOURCE_LOAD_PATH);
 	}
-	else
-	{
-		API_LOG_DEBUG("%s not found",CERT_RESOURCE_LOAD_PATH);
+
+	if (OsFileExist(CUST_RESOURCE_LOAD_PATH)==1) {
+		ret = OsFileUnzip(CUST_RESOURCE_LOAD_PATH, "/ext/cust");
+		API_LOG_DEBUG("OsFileUnzip %s ret:%d", CUST_RESOURCE_LOAD_PATH, ret);
+		ret = OsFileRemove(CUST_RESOURCE_LOAD_PATH);
 	}
 
 	if (OsFileExist("/flashFile0")==1) 

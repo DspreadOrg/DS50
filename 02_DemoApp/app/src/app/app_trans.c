@@ -192,8 +192,6 @@ int UnLockFlag=0;
 						 {
 							 tradeType = 3;
 						 }
-						 gTraceNo = ++gTraceNo % 10000000;
-						 sprintf(tradeNoStr, "%d", gTraceNo);
 						 if (card_read_method == 1)
 							 app_beep_play();
 						 ret = Pub_EmvProcess(card_read_method);
@@ -221,7 +219,7 @@ int UnLockFlag=0;
 			 sprintf(tradeNoStr, "%d", gTraceNo);
 			 if (ret == APP_RC_COMPLETED) {
  
-				 app_transaction_resultShow(tradeType, 1, moneyBuf, tradeNoStr, outtradeNoStr);
+				 app_transaction_resultShow(tradeType, 1, moneyBuf, tradeNoStr, "Transaction Success");
 				 app_dsp_play(0,"/ext/audio/english/dsp_transactionsucc.wav","transaction success", 1);
 			 }
 			 else {
@@ -230,7 +228,7 @@ int UnLockFlag=0;
 					 API_LOG_DEBUG("app_trans_process g_qrOutTradeNo:%s\r\n", g_qrOutTradeNo);
 					 WaitAppUnlock();
 				 }
-				 app_transaction_resultShow(tradeType, 2, moneyBuf, tradeNoStr, outtradeNoStr);
+				 app_transaction_resultShow(tradeType, 2, moneyBuf, tradeNoStr, "Transaction Fail");
 				 app_dsp_play(0,"/ext/audio/english/dsp_transactionfail.wav","transaction fail", 1);
 			 }
 			 if(initFlag==1)

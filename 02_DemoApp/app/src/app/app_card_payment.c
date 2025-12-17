@@ -72,20 +72,20 @@ unsigned int Fild55[] =
  */
 void get_payment_brand(char* aid ,char *paybrand) 
 {
-    if (strncmp(aid, "A000000003",10) == 0) 
+    if (memcmp(aid, "\xA0\x00\x00\x00\x03",5) == 0) 
         strcpy(paybrand, "VISA");  
-    else if (strncmp(aid, "A000000004",10) == 0)
+    else if (memcmp(aid, "\xA0\x00\x00\x00\x04",5) == 0)
 		
 		strcpy(paybrand, "MasterCard"); 
-    else if (strncmp(aid, "A000000025",10) == 0) 
+    else if (memcmp(aid, "\xA0\x00\x00\x00\x25",5) == 0) 
         strcpy(paybrand, "ExpressPay");
-    else if (strncmp(aid, "A000000065",10) == 0) 
+    else if (memcmp(aid, "\xA0\x00\x00\x00\x65",5) == 0) 
         strcpy(paybrand, "JCB J/Speedy");
-    else if (strncmp(aid, "A000000658",10) == 0) 
+    else if (memcmp(aid, "\xA0\x00\x00\x06\x58",5) == 0) 
         strcpy(paybrand,"Discover Contactless");
-    else if (strncmp(aid, "A000000333",10) == 0||strncmp(aid, "A000000790",10) == 0)  	
+    else if (memcmp(aid, "\xA0\x00\x00\x03\x33",5) == 0||memcmp(aid, "\xA0\x00\x00\x07\x90",5) == 0)  	
         strcpy(paybrand, "UnionPay");
-	else if (strncmp(aid, "A000000524",10) == 0) 
+	else if (memcmp(aid, "\xA0\x00\x00\x05\x24",5) == 0) 
         strcpy(paybrand,"RuPay");
     else 
         strcpy(paybrand, "Unknown");
@@ -436,8 +436,6 @@ int EMV_InputAmount(char Type, char *Amount)
     return RETURN_SUCC;
 }
 
-void Sys_InitFlash();
-
 
 /*
  * function: Function to EMV init
@@ -701,11 +699,48 @@ int aidSelect(AidCandidate_t *pList, int listNum){
 }
 //Card number confirmation return value 0 Confirm-1 failed
 int confirmCardInfo(char *pan,int len){
+	API_LOG_DEBUG("pan[%d] = %s",len,pan);
 	memcpy(gEmvInfo.szPan,pan,len);
     return 0;
 }
 
-int Emv_GetCardInfo(){
+
+int Emv_GetCardInfo()
+{
+	unsigned char *pNode = NULL;
+	int len= 0;
+	Pack_EmvData(gEmvInfo.sField55,&gEmvInfo.cFieldlen);
+
+	if((pNode = Emv_GetCoreData(EMVTAG_AID, &len)) != NULL)
+	{
+		memcpy(gEmvInfo.sAID,pNode,len);
+		gEmvInfo.sAID[len] = '\0';
+		get_payment_brand(gEmvInfo.sAID,gEmvInfo.cardOrg);
+	}
+
+	if((pNode = Emv_GetCoreData(EMVTAG_TRACK2, &len)) != NULL)
+	{
+		memcpy(gEmvInfo.sztrack2,pNode,len);
+		gEmvInfo.sztrack2[len] = '\0';
+		gEmvInfo.track2len = len;
+	}
+
+	
+	if((pNode = Emv_GetCoreData(0x9F36, &len)) != NULL)
+	{
+		memcpy(gEmvInfo.sATC,pNode,len);
+		gEmvInfo.sATC[len] = '\0';
+	}
+	if((pNode = Emv_GetCoreData(0x9B, &len)) != NULL)
+	{
+		memcpy(gEmvInfo.sTSI,pNode,len);
+		gEmvInfo.sTSI[len] = '\0';
+	}
+	if((pNode = Emv_GetCoreData(0x95, &len)) != NULL)
+	{
+		memcpy(gEmvInfo.sTVR,pNode,len);
+		gEmvInfo.sTVR[len] = '\0';
+	} 
 	return 0;
 }
 
@@ -721,15 +756,15 @@ int Pack_EmvData(unsigned char* pEmvData,int *pEmvDataLen)
 						EMVTAG_CARD_ID, EMVTAG_ARC, EMVTAG_EC_AUTH_CODE};
 	totalLength = Emv_FetchData(tags, PR_ARRAY_SIZE(tags), buf, PR_ARRAY_SIZE(buf));
 
-	nBcd2Asc(buf,totalLength*2,pEmvData,0);
-	//memcpy(pEmvData,buf,totalLength);
-	*pEmvDataLen = totalLength*2;
+	memcpy(pEmvData,buf,totalLength);
+	*pEmvDataLen = totalLength;
 	
 	return 0;
 }
 
 int onlineProcess(EmvOnlineData_t* pOnlineData){
-
+	Emv_GetCardInfo();
+	app_lvgl_mainShow(DSP_WAITTING_IMG, 100, 100, "Online Process", LV_COLOR_DSP_BLUE);
     return app_dsp_cardPay(SALE_ONLINE_REQUEST_URL,&gEmvInfo,pOnlineData);
 }
 
@@ -767,6 +802,10 @@ int inputPasswd(int type, char *pszPin)
 	if(type == EMV_ONLINEPIN_INPUT)
 	{
 		ret = EMV_InputOnlinePasswd(gEmvInfo.szPan,pszPin);
+		if(ret > 0)
+		{
+			Pub_BcdToAsc(pszPin,gEmvInfo.szPinBlock,8);
+		}
 	}
 	else
 	{
@@ -855,55 +894,6 @@ int Pub_EmvProcess(int card_read_method)
 
 	if(card_read_method == 2 && isBeepPlay == 0)
 		app_beep_play();
-
-    nEmvRet = EmvL2_Proc(emvTransParams);
-	if(nEmvRet < APP_RC_NUMS && nEmvRet != -1)
-		API_LOG_DEBUG( "emv kernel recode [%s]",EMV_RETURN_CODE[nEmvRet]);
-	else
-		API_LOG_DEBUG( "emv kernel recode [%d]",nEmvRet);   
-    return nEmvRet;
-}
-
-int Pub_EMVProcessApp(int card_read_method,char *cardNum,APPEMVINFO *emvInfo)
-{
-	API_LOG_DEBUG( "EMV_Process...");
-	int ret;
-	int pnPanLen;
-	char timeStr[16];
-	char newamount[13];
-
-	memset(&gEmvInfo,0,sizeof(gEmvInfo));
-
-    EmvTransParams_t emvTransParams;
-    int nEmvRet;
-    char szCardno[20] = {0};
-	inputpinpassward=false;	
-
-    memset(&emvTransParams,0x0,sizeof(EmvTransParams_t));
-    emvTransParams.trans_type = EMV_L2_SALE;  
-    app_reviseAmount(cardpayamount, newamount);
-    memcpy((char *)emvTransParams.trans_amount,newamount,12);
-
-	pub_getRtcTime(timeStr);
-	Pub_AscToBcd(timeStr, (char*)emvTransParams.trans_time, 14);
-    emvTransParams.force_online_enable = 0; 
-
-	if(card_read_method == 1 ){
-        emvTransParams.icc_type = CONTACT_ICC;
-    }else if(card_read_method == 2){
-		isBeepPlay = 0;
-        emvTransParams.icc_type = CONTACTLESS_ICC;
-    }
-    else{
-        return -1;
-    }
-
-	if(card_read_method == 2 && isBeepPlay == 0)
-		app_beep_play();
-	if(card_read_method == 2)
-	{
-    	App_ICCardClose(IC_CARD_NO);
-	}
 
     nEmvRet = EmvL2_Proc(emvTransParams);
 	if(nEmvRet < APP_RC_NUMS && nEmvRet != -1)

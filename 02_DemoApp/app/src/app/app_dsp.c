@@ -4,6 +4,7 @@
 #include "cJSON.h"
 #include "app_card_payment.h"
 #include "dsp_emv.h"
+#include "api_sec_alg.h"
 
 char gShopId[24] = { 0 };
 char gStaffId[24] = { 0 };
@@ -14,17 +15,14 @@ int gBatchNo = 0;
 static int dsp_init_flag = 0;
 
 extern dsp_tradeInfo_t m_tradeInfo;
-
+extern char cardpayamount[64];
 
 static unsigned int m_dsp_mutext_lock = 0;
 #define DSP_MUTEX_LOCK		 if(m_dsp_mutext_lock == 0){m_dsp_mutext_lock= OsSysSemNew(1);}if(m_dsp_mutext_lock!=0)OsSysSemWait(m_dsp_mutext_lock);
 #define	DSP_MUTEX_UNLOCK	  if(m_dsp_mutext_lock!=0)OsSysSemSignal(m_dsp_mutext_lock);
 
 
-#define OFFLINE_TEST 1
-
-
-
+#define OFFLINE_TEST 0
 
 int app_dsp_getInitFlag(void) {
 	if (strlen(serialID) == 0) {
@@ -466,8 +464,7 @@ exit:
 int app_dsp_qrcodePayRefund(
 	char* mchntCd, char* deviceId,
 	char* url, char* amount,
-	char* traceNo, char* batchNo,
-	char* outTradeId, int* transState,
+	char* traceNo, char* batchNo, int* transState,
 	char* msgOut) {
 
 	int ret = -1;
@@ -493,7 +490,6 @@ int app_dsp_qrcodePayRefund(
 	cJSON_AddStringToObject(data, "transType", "1106");
 	cJSON_AddStringToObject(data, "deviceSn", serialID);
 	cJSON_AddStringToObject(data, "traceNo", traceNo);
-	cJSON_AddStringToObject(data, "origOutTradeNo", outTradeId);
 	cJSON_AddStringToObject(data, "refundFee", amount);
 	cJSON_AddStringToObject(data, "remark", "");
 	cJSON_AddStringToObject(data, "batchNo", batchNo);
@@ -584,25 +580,22 @@ int app_dsp_transactionFlow(
 	int itraceNo = 0;
 	char* resp_content = NULL;
 	int resp_content_len = 0;
+	unsigned char date[16]= {0};
 	char* headers = (char*)OsSysMalloc(1024);
 	memset(headers, 0, 1024);
 	char fullUrl[128] = { 0 };
 	char* bodyParamsStr = NULL;
-	cJSON* root = NULL, * params = NULL;
+	cJSON* root = NULL;
 	cJSON* respRoot = NULL;
 	root = cJSON_CreateObject();
-	params = cJSON_CreateObject();
 	cJSON_AddNumberToObject(root, "pageNo", pageNo);
 	cJSON_AddNumberToObject(root, "pageSize", pageSize);
-
-
-
-	cJSON_AddStringToObject(params, "mchntCd", mchntCd);
-	cJSON_AddStringToObject(params, "deviceSn", serialID);
-
-	cJSON_AddItemToObject(root, "params", params);
-
-	sprintf(fullUrl, "%s/trade/transactionFlow", url);
+	cJSON_AddStringToObject(root, "deviceSn", serialID);
+	Pub_getFomartTime(headers);
+	memcpy(date, headers,10);
+	cJSON_AddStringToObject(root, "date", date);
+	memset(headers, 0, 1024);
+	sprintf(fullUrl, "%s:%s%s",App_GetPosParam()->pgw_endpoint,App_GetPosParam()->pgw_port,App_GetPosParam()->pgw_api_details);
 	bodyParamsStr = cJSON_PrintUnformatted(root);
 	if (bodyParamsStr != NULL)
 	{
@@ -637,28 +630,22 @@ int app_dsp_transactionFlow(
 			cJSON* respCode = cJSON_GetObjectItem(respRoot, "respCode");
 			if (respCode) {
 				if (strcmp(respCode->valuestring, "00")) {
-					cJSON* respMsg = cJSON_GetObjectItem(respRoot, "respMsg");
-					if (respMsg) {
-						API_LOG_DEBUG("respMsg:%s\r\n", respMsg->valuestring);
-						memcpy(msgOut, respMsg->valuestring, strlen(respMsg->valuestring));
 						ret = -1;
 						goto exit;
-					}
 				}
 				else {
 					API_LOG_DEBUG("extract transInfo\r\n");
-					cJSON* transInfo = cJSON_GetObjectItem(respRoot, "transInfo");
-					cJSON* totalJson = cJSON_GetObjectItem(transInfo, "total");
+					cJSON* totalJson = cJSON_GetObjectItem(respRoot, "total");
 					if (totalJson) {
 						*total = totalJson->valueint;
 					}
 
-					cJSON* rows = cJSON_GetObjectItem(transInfo, "rows");
-					if (rows != NULL) {
+					cJSON* transInfo = cJSON_GetObjectItem(respRoot, "transInfo");
+					if (transInfo != NULL) {
 						dsp_tradeInfo_t* pinfos = infos;
-						int row_count = cJSON_GetArraySize(rows);
+						int row_count = cJSON_GetArraySize(transInfo);
 						for (i = 0; i < row_count; i++) {
-							cJSON* row = cJSON_GetArrayItem(rows, i);
+							cJSON* row = cJSON_GetArrayItem(transInfo, i);
 							cJSON* item = cJSON_GetObjectItem(row, "traceNo");
 							if (item != NULL) {
 								if (item->valuestring != NULL)
@@ -674,21 +661,25 @@ int app_dsp_transactionFlow(
 								if (item->valuestring != NULL)
 									memcpy(pinfos->transStatus, item->valuestring, strlen(item->valuestring));
 							}
-							item = cJSON_GetObjectItem(row, "transTypeId");
+
+							item = cJSON_GetObjectItem(row, "acqAuthCode");
 							if (item != NULL) {
 								if (item->valuestring != NULL)
-									memcpy(pinfos->transTypeId, item->valuestring, strlen(item->valuestring));
+									memcpy(pinfos->acqAuthCode, item->valuestring, strlen(item->valuestring));
 							}
-							item = cJSON_GetObjectItem(row, "outTradeId");
-							if (item != NULL) {
-								if (item->valuestring != NULL)
-									memcpy(pinfos->origOutTradeId, item->valuestring, strlen(item->valuestring));
-							}
-							item = cJSON_GetObjectItem(row, "transDatetime");
+
+							item = cJSON_GetObjectItem(row, "date");
 							if (item != NULL) {
 								if (item->valuestring != NULL)
 									memcpy(pinfos->transDatetime, item->valuestring, strlen(item->valuestring));
 							}
+
+							item = cJSON_GetObjectItem(row, "time");
+							if (item != NULL) {
+								if (item->valuestring != NULL)
+									sprintf(pinfos->transDatetime+strlen(pinfos->transDatetime), " %s", item->valuestring);
+							}
+
 
 							item = cJSON_GetObjectItem(row, "transAmount");
 							if (item != NULL) {
@@ -702,7 +693,11 @@ int app_dsp_transactionFlow(
 									memcpy(pinfos->cardNo, item->valuestring, strlen(item->valuestring));
 							}
 
-
+							item = cJSON_GetObjectItem(row, "cardOrg");
+							if (item != NULL) {
+								if (item->valuestring != NULL)
+									memcpy(pinfos->cardOrg, item->valuestring, strlen(item->valuestring));
+							}
 							pinfos++;
 						}
 					}
@@ -943,15 +938,19 @@ exit:
 	return ret;
 }
 
-int app_dsp_cardPay(
-	char* url, APPEMVINFO *emvInfo,EmvOnlineData_t* pOnlineData) {
+int app_dsp_cardPay(char* url, APPEMVINFO *emvInfo,EmvOnlineData_t* pOnlineData) 
+{
 	DSP_MUTEX_LOCK;
 	int ret = -1, i = 0;
 	int itraceNo = 0;
 	char* resp_content = NULL;
 	int resp_content_len = 0;
 	char* headers = (char*)OsSysMalloc(1024*2);
+	char* tempBuf = (char*)OsSysMalloc(512);
+	int tempBufLen = 0;
+
 	memset(headers, 0, 1024*2);
+	memset(tempBuf, 0, 512);
 
 	char traceNo[8] = { 0 };
 	char batchNo[8] = { 0 };
@@ -959,11 +958,14 @@ int app_dsp_cardPay(
 
 	char fullUrl[128] = { 0 };
 	char* bodyParamsStr = NULL;
-	cJSON* root = NULL, * data = NULL;
+	cJSON* root = NULL, * item = NULL;
 	cJSON* respRoot = NULL;
 	root = cJSON_CreateObject();
-	data = cJSON_CreateObject();
 
+	if (++gTraceNo % 1000000 == 999999) {
+		API_LOG_DEBUG("gTraceNo overflow\r\n");
+		gTraceNo = 1;
+	}
 	sprintf(traceNo, "%06d", gTraceNo);
 	sprintf(batchNo, "%06d", gBatchNo);
 	sprintf(m_tradeInfo.traceNo, "%06d", gTraceNo);
@@ -971,27 +973,45 @@ int app_dsp_cardPay(
 	write_transaction_info();
 
 	cJSON_AddStringToObject(root, "deviceSn", serialID);
-	cJSON_AddStringToObject(root, "staffId", "0001");
-	cJSON_AddStringToObject(root, "sysId", "001");
+	cJSON_AddStringToObject(root, "model", DEVICE_MODEL);
+	cJSON_AddStringToObject(root, "appVersion", APP_VERSION);
+	cJSON_AddStringToObject(root, "transType", "SALE");
+	cJSON_AddStringToObject(root, "payType", "CARD");
+	cJSON_AddStringToObject(root, "transAmount", cardpayamount);
+	cJSON_AddStringToObject(root, "cardNo", emvInfo->szPan);
+	cJSON_AddStringToObject(root, "cardOrg", emvInfo->cardOrg);
+	cJSON_AddStringToObject(root, "cardSN", emvInfo->szCardSerialNo);
 
-	cJSON_AddStringToObject(data, "appVersion", "1.0.0");
-	cJSON_AddStringToObject(data, "batchNo", batchNo);
-	cJSON_AddStringToObject(data, "cardNo", emvInfo->szPan);
-	cJSON_AddStringToObject(data, "cardSN", emvInfo->szCardSerialNo);
+	if(strlen(emvInfo->szPinBlock))
+		cJSON_AddStringToObject(root, "pin", emvInfo->szPinBlock);
 
-	icData=(char*)OsSysMalloc(emvInfo->cFieldlen*2+1);
-	memset(icData,0,emvInfo->cFieldlen*2+1);
-	Pub_BcdToAsc(emvInfo->sField55,icData,emvInfo->cFieldlen);
+	memset(tempBuf, 0, 512);
+	memset(headers, 0, 1024*2);
+	Pub_getFomartTime(tempBuf);
+	memcpy(headers, tempBuf, 10); //2025-12-15
+	cJSON_AddStringToObject(root, "date", headers);
+	memset(headers, 0, 1024*2);
+	memcpy(headers, tempBuf+11, 8);//14:15:16
+	cJSON_AddStringToObject(root, "time", headers);
 
-	cJSON_AddStringToObject(data, "icData", icData);
-	cJSON_AddStringToObject(data, "traceNo", traceNo);
-	cJSON_AddStringToObject(data, "track2",emvInfo->sztrack2);
-	cJSON_AddItemToObject(root, "data", data);
-	sprintf(fullUrl, "%s/trade/cardPay", url);
+	memset(tempBuf, 0, 512);
+	Pub_DesCalcData(0x01, 0x01, DATA_KEY_INDEX, emvInfo->sField55, emvInfo->cFieldlen, tempBuf, &tempBufLen);
+	Pub_BcdToAsc(tempBuf, headers, tempBufLen);
+	cJSON_AddStringToObject(root, "emvData", headers);
+	cJSON_AddStringToObject(root, "traceNo", traceNo);
+	cJSON_AddStringToObject(root, "batchNo", batchNo);
+
+	memset(tempBuf, 0, 512);
+	memset(headers, 0, 1024*2);
+	ret = Pub_DesCalcData(0x01, 0x01, DATA_KEY_INDEX, emvInfo->sztrack2, emvInfo->track2len, tempBuf, &tempBufLen);
+	API_LOG_DEBUG("Pub_Des ret = %d\n", ret);
+	Pub_BcdToAsc(tempBuf, headers, tempBufLen);
+	cJSON_AddStringToObject(root, "track2",headers);
+
+	memset(tempBuf, 0, 512);
+	memset(headers, 0, 1024*2);
+	sprintf(fullUrl, "%s:%s%s", App_GetPosParam()->pgw_endpoint,App_GetPosParam()->pgw_port, App_GetPosParam()->pgw_api_sale);
 	bodyParamsStr = cJSON_PrintUnformatted(root);
-	if (icData) {
-		OsSysFree(icData);
-	}
 
 	if (bodyParamsStr != NULL)
 	{
@@ -1011,17 +1031,44 @@ int app_dsp_cardPay(
 		}
 	}
 #if OFFLINE_TEST
+			OsSysMsleep(2000);
             memcpy(pOnlineData->iccResponse,"00",2); //responcess
             //Analyze the EMV data returned by the server, which should include 91tag or 71 or 72tag
             // memcpy(pOnlineData->ackdata,"\x72\x20\x86\x0E\x04\xDA\x00\x00\x02\x01\x92\x42\x81\x02\x7A\x08\xE4\x36\x86\x06\x04\xDA\x00\x00\x00\x01\x86\x06\x04\xDA\x00\x00\x01\x01",34);
 			// pOnlineData->ackdatalen = 34;
 			ret = 0;
 #else	
-	if (ret == 0) {
-		//Process corresponding data
+	if (ret == 0) 
+	{
+		do
+		{
+			ret = -1;
+			respRoot = cJSON_Parse(resp_content);
+			if (respRoot == NULL) 
+				break;
+			item = cJSON_GetObjectItem(respRoot, "acqResponseCode");
+			if(item == NULL)
+				break;
+			if (item->valuestring != NULL)
+				memcpy(pOnlineData->iccResponse,item->valuestring,2); 
+
+			item = cJSON_GetObjectItem(respRoot, "emvData");
+			if(!item)
+			{
+				if (item->valuestring != NULL)
+				{
+					Pub_AscToBcd(item->valuestring,pOnlineData->ackdata,strlen(item->valuestring));
+					pOnlineData->ackdatalen = strlen(item->valuestring)/2;
+				}
+			}
+			ret = 0;
+		} while (0);
 	}
 #endif
 exit:
+	if(tempBuf)	{
+		OsSysFree(tempBuf);
+	}
 
 	if (headers) {
 		OsSysFree(headers);

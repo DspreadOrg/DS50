@@ -47,8 +47,7 @@ int app_dsp_qrcodePayRefund(
 	char* mchntCd, char* deviceId,
 	char* url, char* amount,
 	char* traceNo, char* batchNo,
-	char* outTradeId, int* transState,
-	char* msgOut);
+	 int* transState,	char* msgOut);
 
 int app_dsp_transactionFlow(
 	char* mchntCd, char* deviceId,

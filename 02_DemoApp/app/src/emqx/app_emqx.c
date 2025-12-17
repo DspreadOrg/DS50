@@ -138,7 +138,7 @@ static void emqx_state_fun(void*args){
 
 	case MQTT_SIG_CONNECT_RSP:
 		if (state->ret == 1) {
-			sprintf(topicbuf, "%s/%s",App_GetPosParam()->mqtt_topic_command,glb_sn);
+			sprintf(topicbuf, "%s/%s",App_GetPosParam()->mqtt_topic,glb_sn);
 			API_LOG_DEBUG("topicbuf:%s\r\n",topicbuf);
 			ret += OsMqttSubEx(1,topicbuf, 1, appMqttMessageArrived);
 			API_LOG_DEBUG("OsMqttSub ret:%d\r\n");
@@ -161,8 +161,14 @@ int app_emqx_service_start() {
 	int ret = -1;
 	get_sn(glb_sn);
 	API_LOG_DEBUG("app_emqx_mqttConnect sn:%s\r\n", glb_sn);
+	if(strlen(App_GetPosParam()->mqtt_endpoint) == 0)
+		return -1;
+		
 	OsMqttSetStateHandleEx(1, emqx_state_fun);
-	OsMqttSetUserNamePwdEx(1, App_GetPosParam()->mqtt_username, App_GetPosParam()->mqtt_password);
+	if(strlen(App_GetPosParam()->mqtt_username) == 0 || strlen(App_GetPosParam()->mqtt_password) == 0)
+		OsMqttSetUserNamePwdEx(1, glb_sn, glb_sn);
+	else
+		OsMqttSetUserNamePwdEx(1, App_GetPosParam()->mqtt_username, App_GetPosParam()->mqtt_password);
 	// if (OsParamsGetNetMode() == 1) {//4g
 	// 	OsWlSslSetFile("/ext/key/server.pem", "/ext/key/client.pem", "/ext/key/client.key");
 	// }

@@ -33,15 +33,9 @@ void App_PosParamProcess(char *pchParam)
 		item = cJSON_GetObjectItem(root, "mqtt_password");
 		if(item)
 			memcpy(g_posParam.mqtt_password,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_topic_command");
+		item = cJSON_GetObjectItem(root, "mqtt_topic");
 		if(item)
-			memcpy(g_posParam.mqtt_topic_command,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_topic_response");
-		if(item)
-			memcpy(g_posParam.mqtt_topic_response,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_topic_voice");
-		if(item)
-			memcpy(g_posParam.mqtt_topic_voice,item->valuestring,strlen(item->valuestring));
+			memcpy(g_posParam.mqtt_topic,item->valuestring,strlen(item->valuestring));
 
 		item = cJSON_GetObjectItem(root, "pgw_endpoint");
 		if(item)
@@ -103,6 +97,7 @@ int App_PosParamInit(void)
 {	
 	char *buff = NULL;
 	int fd,ret;
+	int pramExist = 0,i;
 	buff = OsSysMalloc(2048);
 	memset(buff,0,2048);
 	memset(&g_posParam,0,sizeof(POS_PARAM_ST));
@@ -129,19 +124,27 @@ int App_PosParamInit(void)
 		API_LOG_DEBUG("App_PosParamInit: read posparam.ini success [%d]",ret);
 		API_LOG_DEBUG("App_PosParamInit: read posparam.ini [%s]",buff);
 		App_PosParamProcess(buff);
-		OsFileClose(fd);	
+		OsFileClose(fd);
+		pramExist = 1;	
 	} while (0);
 
 	OsSysFree(buff);
+
+	if(!pramExist)
+	{
+		for ( i = 0; i < 3; i++)
+		{
+			app_dsp_play(0,"/ext/audio/english/dsp_checkparam.wav","Please check pos param", 1);
+			OsSysMsleep(1000);
+		}
+	}
 
 	API_LOG_DEBUG("g_posParam.mqtt_endpoint=[%s]",g_posParam.mqtt_endpoint);
 	API_LOG_DEBUG("g_posParam.mqtt_port=[%s]",g_posParam.mqtt_port);
 	API_LOG_DEBUG("g_posParam.mqtt_auth_cert=[%s]",g_posParam.mqtt_auth_cert);
 	API_LOG_DEBUG("g_posParam.mqtt_username=[%s]",g_posParam.mqtt_username);
 	API_LOG_DEBUG("g_posParam.mqtt_password=[%s]",g_posParam.mqtt_password);
-	API_LOG_DEBUG("g_posParam.mqtt_topic_command=[%s]",g_posParam.mqtt_topic_command);
-	API_LOG_DEBUG("g_posParam.mqtt_topic_response=[%s]",g_posParam.mqtt_topic_response);
-	API_LOG_DEBUG("g_posParam.mqtt_topic_voice=[%s]",g_posParam.mqtt_topic_voice);
+	API_LOG_DEBUG("g_posParam.mqtt_topic=[%s]",g_posParam.mqtt_topic);
 	API_LOG_DEBUG("g_posParam.pgw_endpoint=[%s]",g_posParam.pgw_endpoint);
 	API_LOG_DEBUG("g_posParam.pgw_port=[%s]",g_posParam.pgw_port);
 	API_LOG_DEBUG("g_posParam.pgw_auth_type=[%s]",g_posParam.pgw_auth_type);
@@ -162,17 +165,16 @@ int App_PosParamInit(void)
 	char buf[30+1]={0};
 	unsigned char mainKey[32]="\x55\x55\x55\x55\x55\x55\x55\x55\x66\x66\x66\x66\x66\x66\x66\x66";
 	unsigned char PINKey[32]="\x4A\x2D\xC7\x50\x9E\x20\xFD\x47\x60\xBF\x3F\xEE\xB8\xC8\xE6\x5F";
+	unsigned char DaTaKey[32]="\x4A\x2D\xC7\x50\x9E\x20\xFD\x47\x60\xBF\x3F\xEE\xB8\xC8\xE6\x5F";
 	unsigned char kcv[4]="\xBB\x02\x56\x9C";
 
 
 	nRet= OsSecUpdatePlainKey(0, 0x01, 0, mainKey, 16);
-	API_LOG_DEBUG("tms OsSecUpdatePlainKey=[%d]",nRet);
 
-	nRet= OsSecUpdateCipherKey(0x10, 1, 1, 0, 10, PINKey, 16, 1, kcv, 4);
+	nRet= OsSecUpdateCipherKey(0x10, 0x1, 1, 0, PIN_KEY_INDEX, PINKey, 16, 1, kcv, 4);
+	nRet= OsSecUpdateCipherKey(0x10, 0x1, 1, 0, DATA_KEY_INDEX, DaTaKey, 16, 1, kcv, 4);
 
-	API_LOG_DEBUG("tms OsSecUpdateCipherKey=[%d]",nRet);
-
-	if(OsFileExist(FILE_EMV_APP_PARAM)!=1 || OsFileExist(FILE_EMV_CAPK_PARAM)!=1)
+	if(!Emv_AidPramAndCapkExist())
 	{
 		EmvL2_SetDefaultAidAndCapk();
 	}

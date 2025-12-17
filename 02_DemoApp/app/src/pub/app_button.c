@@ -273,26 +273,20 @@ static void handle_clear(void)
 					  tradeInfo[0].traceNo,
 					  tradeInfo[0].batchNo,
 					  tradeInfo[0].transStatus,
-					  tradeInfo[0].transTypeId,
-					  tradeInfo[0].origOutTradeId,
 					  tradeInfo[0].transDatetime,
 					  tradeInfo[0].money,
 					  tradeInfo[0].cardNo);
 		int transState = -1;
 		char amountFormat[12] = {0};
 		char msgOut[128] = {0};
-		if (
-			(strcmp(tradeInfo[0].transTypeId, "1102") == 0 || strcmp(tradeInfo[0].transTypeId, "1103") == 0 || strcmp(tradeInfo[0].transTypeId, "1101") == 0) &&
-			(strcmp(tradeInfo[0].transStatus, "02") == 0) &&
-			strlen(tradeInfo[0].origOutTradeId))
+		if (strcmp(tradeInfo[0].transStatus, "APPROVE") == 0)
 		{
 			API_LOG_DEBUG("this is scan code refund\r\n");
 			// sprintf(amountFormat,"%d.%d",atoi(tradeInfo[0].money)/100, atoi(tradeInfo[0].money) % 100);
 			ret = app_dsp_qrcodePayRefund(
 				MCHNTCD, DEVICEID,
 				DSP_URL, tradeInfo[0].money,
-				tradeInfo[0].traceNo, tradeInfo[0].batchNo,
-				tradeInfo[0].origOutTradeId, &transState,
+				tradeInfo[0].traceNo, tradeInfo[0].batchNo, &transState,
 				msgOut);
 			if (ret == 0)
 				app_lvgl_mainShow(DSP_SUCC_IMG, 100, 100,
@@ -300,23 +294,6 @@ static void handle_clear(void)
 			else
 				app_lvgl_mainShow(DSP_FAIL_IMG, 100, 100,
 								  "Refund fail", LV_COLOR_DSP_RED);
-		}
-		else if ((strcmp(tradeInfo[0].transTypeId, "1202") == 0) && (strcmp(tradeInfo[0].transStatus, "02") == 0))
-		{
-
-			API_LOG_DEBUG("this is cardpay refund\r\n");
-			// sprintf(amountFormat, "%d.%d", atoi(tradeInfo[0].money) / 100, atoi(tradeInfo[0].money) % 100);
-			ret = app_dsp_cardPayRefund(
-				MCHNTCD, DEVICEID, DSP_URL,
-				tradeInfo[0].money, tradeInfo[0].cardNo, serialID,
-				tradeInfo[0].traceNo, tradeInfo[0].batchNo, tradeInfo[0].origOutTradeId, msgOut);
-
-			if (ret != 0)
-				app_lvgl_mainShow(DSP_FAIL_IMG, 100, 100,
-								  "Refund fail", LV_COLOR_DSP_RED);
-			else
-				app_lvgl_mainShow(DSP_SUCC_IMG, 100, 100,
-								  "Refund success", LV_COLOR_DSP_GREEN);
 		}
 		else
 		{

@@ -688,3 +688,62 @@ void rf_test()
 	OsRfPowerOff();
 	OsRfClose();
 }
+
+void Pub_getFomartTime(char *time) //YYYY-MM-DD HH:mm:ss
+{
+    char buff[32] = {0};
+    int len = 0;
+    OsSysGetRtcTime(buff);
+    memcpy(time,buff,4);
+    len += 4;
+    strcat(time,"-");
+    len+=1;
+    memcpy(time+len,buff+4,2);
+    len += 2;
+    strcat(time,"-");
+    len += 1;
+    memcpy(time+len,buff+6,2);
+    len += 2;
+    strcat(time," ");
+    len += 1;
+    memcpy(time+len,buff+8,2);
+    len += 2;
+    strcat(time,":");
+    len += 1;
+    memcpy(time+len,buff+10,2);
+    len += 2;
+    strcat(time,":");
+    len += 1;
+    memcpy(time+len,buff+12,2);
+}
+
+int Pub_DesCalcData(s32 mode, u8 alg, u32 idx, u8 *pData, u32 dataLen, u8 *pDataOut, u32 *pDataOutLen)
+{
+    u8 *pAlignedData = NULL;
+    u32 alignedLen = dataLen;
+    if (dataLen == 0)
+    {
+        return -1;
+    }
+
+
+    u32 paddingLen = (8 - (dataLen % 8)) % 8;  
+    alignedLen = dataLen + paddingLen;
+
+    pAlignedData = (u8 *)OsSysMalloc(alignedLen+1);
+    if (pAlignedData == NULL)
+    {
+        return -1;
+    }
+
+    memcpy(pAlignedData, pData, dataLen);
+    if (paddingLen > 0)
+    {
+        memset(pAlignedData + dataLen, 0, paddingLen);
+    }
+
+    int ret = OsSecCalcData(mode,  alg, idx,pAlignedData, alignedLen, pDataOut, pDataOutLen);
+
+    OsSysFree(pAlignedData);
+    return ret;
+}
