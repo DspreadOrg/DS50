@@ -5,6 +5,8 @@
 
 static POS_PARAM_ST g_posParam ={0};
 dsp_tradeInfo_t m_tradeInfo = { 0 };
+extern int gTraceNo;
+extern int gBatchNo;
 POS_PARAM_ST* App_GetPosParam(void)
 {
 	return &g_posParam;
@@ -158,6 +160,9 @@ int App_PosParamInit(void)
 	{
 		write_transaction_info();
 	}
+
+	gBatchNo = atol( m_tradeInfo.batchNo)+1;
+	gTraceNo = atol( m_tradeInfo.traceNo);
 
 #if CFG_APP_DEBUG_MODE	
 

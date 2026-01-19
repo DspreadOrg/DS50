@@ -61,29 +61,6 @@ void app_trans_init(void) {
 		g_qr_queue = OsSysQueueCreate(1, sizeof(qr_queue_t));
 }
 
-
-void app_static_qr(void* param)
-{
-	API_LOG_DEBUG("app_static_qr start ......");
-	int  ret = -1;
-	char msgOut[64] = { 0 };
-	trans_thread_mutexLock();
-	OsSysAppLock();
-	ret = app_dsp_getStaticQrcode(
-		MCHNTCD, DEVICEID,
-		DSP_URL, gQrUrl, gMchntcnName,
-		msgOut);
-	API_LOG_DEBUG("app_dsp_getStaticQrcode ret:%d,gQrUrl:%s,mchntcnNameStr:%s\r\n",
-		ret, gQrUrl, gMchntcnName);
-	if (ret != 0) {
-		strcpy(gQrUrl, "https://www.dspread.com");
-	}
-	API_LOG_DEBUG("res gQrUrl:%s,mchntcnNameStr:%s\r\n", gQrUrl, gMchntcnName);
-	app_static_qrcode_show(gQrUrl, "Dspread");
-	OsSysAppUnLock();
-	trans_thread_mutexUnlock();
-
-}
 int UnLockFlag=0;
  void WaitAppUnlock(void)
  {

@@ -118,4 +118,5 @@ int App_PiccCardClose();
 void rf_test();
 void Pub_getFomartTime(char *time);
 int Pub_DesCalcData(s32 mode, u8 alg, u32 idx, u8 *pData, u32 dataLen, u8 *pDataOut, u32 *pDataOutLen);
+int Pub_GetSn(char *sn);
 #endif

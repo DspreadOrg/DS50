@@ -33,7 +33,8 @@ typedef enum {
 	MODE_SYS_PARAMS_SYNC_TMS_TASKS,
 	MODE_ENVIRONMENT,
 	MODE_LOGSWITCH_SET,
-	MODE_CARDPAY_SHOW,
+	MODE_INPUT_AMT_SHOW,
+	MODE_PAY_TYPE_SET,
 }AppMode;
 extern AppMode current_mode;
 
@@ -72,8 +73,13 @@ static void handle_environment(void);
 void app_mon_button(void *param); 
 int app_button_semWait();
 int app_button_semSig();
+void app_handle_input_amt(u32 button);
+void app_pay_show_input_amt(u32 button);
+
+void app_handle_paytype(u32 button);
+void app_handle_qrpay(u32 button) ;
 void app_handle_cardpay(u32 button);
-void app_cardpay_show(u32 button);
+void  disp_main_menu();
 
 typedef struct {
     u32 key;

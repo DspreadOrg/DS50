@@ -856,6 +856,9 @@ int EmvL2_Proc(EmvTransParams_t emvTransParams){
 		else
 			nEmvRet = APP_RC_TERMINAL;
 	}
+#if OFFLINE_TEST
+	nEmvRet = APP_RC_COMPLETED;
+#endif
     return nEmvRet;
 }
 int Pub_EmvProcess(int card_read_method)

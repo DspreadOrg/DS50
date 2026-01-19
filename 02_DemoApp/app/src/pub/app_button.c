@@ -34,13 +34,16 @@ int transRecordTotal = -1;
 int transRecordcurpage = 1;
 int transRecordPageNum = 0;
 int transRecordTotalpageSize = 1;
-const char *menuItems[] = {"1.Language", "2.Transaction", "3.Version",
-						   "4.Network", "5.System", "6.Card Pay", "7.LogSwitch"};
+const char *menuItems[] = {"1.Sale", "2.Transaction", "3.Version",
+						   "4.Network", "5.System", "6.LogSwitch"};
 const char *languageMenuItems[] = {"1.English"};
 const char *networkMenuItems[] = {"1.4G", "2.Wifi", "3.Smartphone Input", "4.WiFi firmware update"};
 const char *systemMenuItems[] = {"1.Information", "2.Params Setting", "3.Synchronize Time"};
 const char *ISO8583MenuItems[] = {"1.Sign", "2.Sale", "3.Void", "4.Refund", "5.Balance"};
 const char *logMenuItems[] = {"1.OFF", "2.0N"};
+const char *payTypeMenuItems[] = {"1.CardPay", "2.QrPay"};
+
+
 dsp_tradeInfo_t tradeInfo[5] = {0};
 dsp_tradeInfo_t *plastTradeInfo = NULL;
 static ST_AP_LIST pstApList[24] = {0};
@@ -74,28 +77,29 @@ static const KeyHandler key_handlers[] = {
 	{PGUP, MODE_ANY, handle_pgup},
 	{PGDOWN, MODE_ANY, handle_pgdown},
 
-	{DIGITAL1, MODE_MENU, handle_language},
+	{DIGITAL1, MODE_MENU, app_pay_show_input_amt},
 	{DIGITAL2, MODE_MENU, handle_trans_query},
 	{DIGITAL3, MODE_MENU, handle_version_query},
 	{DIGITAL4, MODE_MENU, handle_network_setting},
 	{DIGITAL5, MODE_MENU, handle_system_param},
-	{DIGITAL6, MODE_MENU, app_cardpay_show},
-	{DIGITAL7, MODE_MENU, handle_log_switch},
+	{DIGITAL6, MODE_MENU, handle_log_switch},
 
+	{DIGITAL1, MODE_PAY_TYPE_SET, app_handle_cardpay},
+	{DIGITAL2, MODE_PAY_TYPE_SET, app_handle_qrpay},
 
-	{DIGITAL0, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL1, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL2, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL3, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL4, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL5, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL6, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL7, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL8, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{DIGITAL9, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{CANCEL, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{CLEAR, MODE_CARDPAY_SHOW, app_handle_cardpay},
-	{ENTER, MODE_CARDPAY_SHOW, app_handle_cardpay},
+	{DIGITAL0, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL1, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL2, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL3, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL4, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL5, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL6, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL7, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL8, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{DIGITAL9, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{CANCEL, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{CLEAR, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
+	{ENTER, MODE_INPUT_AMT_SHOW, app_handle_input_amt},
 
 
 	{DIGITAL1, MODE_LOGSWITCH_SET, handle_log_switch_set},
@@ -326,7 +330,7 @@ static void handle_clear(void)
 				memset(g_dynamic_amountFormat, 0, sizeof(g_dynamic_amountFormat));
 				app_amount_formatting(amount, g_dynamic_amountFormat);
 				app_seg_showMoney(g_dynamic_amountFormat);
-				if (current_mode == MODE_CARDPAY_SHOW) {
+				if (current_mode == MODE_INPUT_AMT_SHOW) {
 					app_lvgl_updateInputShow(g_dynamic_amountFormat,0);
 				}
 			}
@@ -454,8 +458,11 @@ static void handle_enter(void)
 	int keyPadMode = 0;
 	int showCnt = 0;
 	char *ssidMenus[32] = {0};
-
-	if (current_mode == MODE_NORMAL || current_mode == MODE_PLUS || current_mode==MODE_CARDPAY_SHOW)
+	if(current_mode == MODE_INPUT_AMT_SHOW)
+	{
+		app_handle_paytype(0);
+	}
+	else if (current_mode == MODE_NORMAL || current_mode == MODE_PLUS || current_mode==MODE_INPUT_AMT_SHOW)
 	{
 		if (app_check_serverStatus())
 		{
@@ -647,7 +654,7 @@ static void handle_cancel(void)
 		current_mode == MODE_TRANS_INFO ||
 		current_mode == MODE_ISO8583 ||
 		current_mode == MODE_WIFI_SETTING||
-		current_mode ==MODE_CARDPAY_SHOW)
+		current_mode ==MODE_INPUT_AMT_SHOW)
 	{
 		trans_thread_mutexLock();
 		app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
@@ -738,15 +745,18 @@ static void handle_cancel(void)
 	else
 	{
 		trans_thread_mutexLock();
+		button_length = 0;
+		memset(amount, 0, sizeof(amount));
+		OsSegShowMoney("0.00");
 		app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
 		trans_thread_mutexUnlock();
-		current_mode = MODE_NORMAL;
+		current_mode = MODE_MENU;
 	}
 }
 void handle_menu(u32 button)
 {
 	API_LOG_DEBUG("menu show,mode=%d\r\n",current_mode);
-	//if ((current_mode == MODE_NORMAL || current_mode == MODE_MENU || current_mode==MODE_CARDPAY_SHOW) && gTransThreadFlag == false ){
+	//if ((current_mode == MODE_NORMAL || current_mode == MODE_MENU || current_mode==MODE_INPUT_AMT_SHOW) && gTransThreadFlag == false ){
 	if (gTransThreadFlag == false )
 	{
 		current_mode = MODE_MENU;
@@ -1056,10 +1066,10 @@ static void handle_wifi_device_setting(void)
 			button_length = 0;
 			app_seg_showMoney(amount);
 			trans_thread_mutexLock();
-
-			app_static_qrcode_show(gQrUrl, gMchntcnName);
+			app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
 			trans_thread_mutexUnlock();
-			current_mode = MODE_NORMAL;
+			current_mode = MODE_MENU;
+
 			break;
 		}
 		lastTick = OsSysTick();
@@ -1689,9 +1699,15 @@ void  show_sale_menu()
 	gTransThreadFlag = false;
 }
 
+void app_pay_show_input_amt(u32 button) {
 
-void app_handle_cardpay(u32 button) {
-	API_LOG_DEBUG("app_handle_cardpay show\r\n");
+	app_lvgl_inputShow("Amout($)","0.00",0,0,0,false);
+	current_mode = MODE_INPUT_AMT_SHOW;
+
+}
+
+void app_handle_input_amt(u32 button) {
+	API_LOG_DEBUG("app_handle_input_amt show\r\n");
 	if (button_length < MAX_AMOUNT_LENGTH)
 	{
 		if (button_length == 0 && button == DIGITAL0)
@@ -1707,10 +1723,76 @@ void app_handle_cardpay(u32 button) {
 	}
 }
 
+void app_handle_paytype(u32 button) {
+	trans_thread_mutexLock();
+	current_mode = MODE_PAY_TYPE_SET;
+	app_lvgl_menuShow("PayType", payTypeMenuItems, sizeof(payTypeMenuItems) / sizeof(payTypeMenuItems[0]));
+	trans_thread_mutexUnlock();
+}
 
-void app_cardpay_show(u32 button) {
+int pack_qr_data(char *buff,char *amount)
+{
+	char sn[32] = {0};
+	Pub_GetSn(sn);
+	sprintf(buff,"%s|%s|%s/%s",sn,amount,App_GetPosParam()->mqtt_topic,sn);
+}
+void app_handle_qrpay(u32 button) {
 
-	app_lvgl_inputShow("Amout($)","0.00",0,0,0,false);
-	current_mode = MODE_CARDPAY_SHOW;
+	char buff[512] = {0};
 
+	trans_thread_mutexLock();
+	if (atoi(amount) != 0 && button_length > 0)
+	{
+		app_dsp_play(APP_AUDIO_PLAY, "/ext/audio/english/dsp_qrcodescan.wav", "Please scan qr code", 0);
+		OsSegShowMoney(g_dynamic_amountFormat);
+		pack_qr_data(buff,amount);
+		app_static_qrcode_show(buff, g_dynamic_amountFormat);
+		memset(amount, 0, sizeof(amount));
+		memset(previous_amount, 0, sizeof(previous_amount));
+		memset(&point, 0, sizeof(point));
+		button_length = 0;
+	}
+	trans_thread_mutexUnlock();
+}
+
+void app_handle_cardpay(u32 button) { 
+	trans_thread_mutexLock();
+	if (current_mode == MODE_PLUS)
+	{
+		if (atoi(amount) != 0 && atoi(previous_amount) != 0)
+		{
+			sprintf(amount, "%d", atoi(amount) + atoi(previous_amount));
+		}
+		else
+		{
+			memcpy(amount, previous_amount, strlen(previous_amount));
+		}
+		memset(g_dynamic_amountFormat, 0, sizeof(g_dynamic_amountFormat));
+		app_amount_formatting(amount, g_dynamic_amountFormat); // 111->1.11
+		button_length = strlen(amount);
+	}
+	if (atoi(amount) != 0 && button_length > 0)
+	{
+		app_dsp_play(APP_AUDIO_PLAY, "/ext/audio/english/dsp_presentcard.wav", "Please present your card", 0);
+		gTransThreadFlag = true;
+		OsSegShowMoney(g_dynamic_amountFormat);
+		strcpy(cardpayamount, g_dynamic_amountFormat);
+		memset(amount, 0, sizeof(amount));
+		memset(previous_amount, 0, sizeof(previous_amount));
+		memset(&point, 0, sizeof(point));
+		button_length = 0;
+	}
+	trans_thread_mutexUnlock();
+}
+
+void  disp_main_menu()
+{
+	memset(amount, 0, sizeof(amount));
+	memset(previous_amount, 0, sizeof(previous_amount));
+	memset(&point, 0, sizeof(point));
+	button_length = 0;
+	trans_thread_mutexLock();
+	app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
+	trans_thread_mutexUnlock();
+	current_mode = MODE_MENU;
 }

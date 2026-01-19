@@ -116,6 +116,8 @@ static void appMqttMessageArrived(void*args)
 		Pub_CopyWithPoint(amt,dspAmt);
 		app_seg_showMoney(dspAmt);
 		app_money_play(dspAmt);
+
+		disp_main_menu();
     }
 
 	emqt_mqtt_lock = false;
@@ -159,30 +161,40 @@ static void emqx_state_fun(void*args){
 
 int app_emqx_service_start() {
 	int ret = -1;
+	int authType = 0;   //4 Triple 1 ssl Bidirectional Authentication
 	get_sn(glb_sn);
 	API_LOG_DEBUG("app_emqx_mqttConnect sn:%s\r\n", glb_sn);
 	if(strlen(App_GetPosParam()->mqtt_endpoint) == 0)
 		return -1;
 		
 	OsMqttSetStateHandleEx(1, emqx_state_fun);
-	if(strlen(App_GetPosParam()->mqtt_username) == 0 || strlen(App_GetPosParam()->mqtt_password) == 0)
-		OsMqttSetUserNamePwdEx(1, glb_sn, glb_sn);
-	else
-		OsMqttSetUserNamePwdEx(1, App_GetPosParam()->mqtt_username, App_GetPosParam()->mqtt_password);
-	// if (OsParamsGetNetMode() == 1) {//4g
-	// 	OsWlSslSetFile("/ext/key/server.pem", "/ext/key/client.pem", "/ext/key/client.key");
-	// }
-	// else {
-	// 	/*	ret=OsWifiLoadCrt(3, "/ext/key/server.pem", 3000);
-	// 		API_LOG_DEBUG("OsWifiLoadCrt ret:%d\r\n",ret);*/
-	// 	ret=OsWifiLoadCrt(4, "/ext/key/client.pem", 3000);
-	// 	API_LOG_DEBUG("OsWifiLoadCrt ret:%d\r\n", ret);
-	// 	ret = OsWifiLoadCrt(5, "/ext/key/client.key", 3000);
-	// 	API_LOG_DEBUG("OsWifiLoadCrt ret:%d\r\n", ret);
-	// }
-	ret = OsMqttConnectEx(1,glb_sn, App_GetPosParam()->mqtt_endpoint,atoi(App_GetPosParam()->mqtt_port), 0,			60, 4);
-			//OsMqttConnectEx(int id, char* clinetId, char* addr, unsigned short port, unsigned char cleansession,
-	//unsigned short keepalive, unsigned char usetls)
+
+
+	if(memcmp(App_GetPosParam()->mqtt_auth_cert,"1",1) == 0) //4 Triple 1 ssl Bidirectional Authentication
+	{
+		if(strlen(App_GetPosParam()->mqtt_username) == 0 || strlen(App_GetPosParam()->mqtt_password) == 0)
+			OsMqttSetUserNamePwdEx(1, glb_sn, glb_sn);
+		else
+			OsMqttSetUserNamePwdEx(1, App_GetPosParam()->mqtt_username, App_GetPosParam()->mqtt_password);
+		authType = 4; //4 Triple 1 ssl Bidirectional Authentication
+	}
+	else  
+	{
+		if (OsParamsGetNetMode() == 1) {//4g
+			OsWlSslSetFile("/ext/key/ServerCA.pem", "/ext/key/deviceCert.pem", "/ext/key/deviceKey.pem");
+		}
+		else {
+			ret=OsWifiLoadCrt(3, "/ext/key/ServerCA.pem", 3000);
+				API_LOG_DEBUG("OsWifiLoadCrt ret:%d\r\n",ret);
+			ret=OsWifiLoadCrt(4, "/ext/key/deviceCert.pem", 3000);
+			API_LOG_DEBUG("OsWifiLoadCrt ret:%d\r\n", ret);
+			ret = OsWifiLoadCrt(5, "/ext/key/deviceKey.pem", 3000);
+			API_LOG_DEBUG("OsWifiLoadCrt ret:%d\r\n", ret);
+		}
+		authType = 1; //4 Triple 1 ssl Bidirectional Authentication
+	}
+
+	ret = OsMqttConnectEx(1,glb_sn, App_GetPosParam()->mqtt_endpoint,atoi(App_GetPosParam()->mqtt_port), 0,			60, authType); 
 	API_LOG_DEBUG("app_emqx_mqttConnect ret:%d\r\n", ret);
 	return ret;
 }

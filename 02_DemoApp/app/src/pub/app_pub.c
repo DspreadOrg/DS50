@@ -747,3 +747,24 @@ int Pub_DesCalcData(s32 mode, u8 alg, u32 idx, u8 *pData, u32 dataLen, u8 *pData
     OsSysFree(pAlignedData);
     return ret;
 }
+
+int Pub_GetSn(char *sn)
+{
+	char sys_sn[32+1] = {0};
+	char cust_sn[32+1] = {0};
+	int sys_sn_len = 0;
+	int cust_sn_len = 0;
+	if(OsSysReadSn(sys_sn,&sys_sn_len,cust_sn,&cust_sn_len) == 0)
+	{
+		sys_sn_len = strlen(sys_sn);
+		memcpy(sn,sys_sn,sys_sn_len);
+		API_LOG_DEBUG("app_emqx_mqttConnect sn:%s\r\n", sn);
+		return;
+	}
+	else
+	{
+		API_LOG_DEBUG("app_emqx_mqttConnect sn get error\r\n");
+	}	
+
+	return sys_sn_len;
+}
