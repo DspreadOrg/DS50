@@ -1,0 +1,15 @@
+{
+	"fileName": "DS50_app_V1.0.3.img",
+	"packageType": "AP",
+	"supportVersion": ".*",
+	"md5": "4fc29e829abcda95f4dd6d772f3f869d",
+	"desc": "update",
+	"platformVersion": 3,
+	"version": "V1.0.3",
+	"diffType": 1,
+	"customerVersion": "0.0.0",
+	"customerName": "DSPREAD",
+	"machineType": "DS50",
+	"hardwarePlatform": "M",
+	"osVersion": "Q"
+}

@@ -1,0 +1,1 @@
+Classify all resource files into different directories, and then package all directories together to generate a zip file. This file will serve as the core resource file

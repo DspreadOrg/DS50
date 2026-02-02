@@ -12,6 +12,8 @@ char orgOrderId_len = 0;
 
 bool emqt_mqtt_lock = false;
 
+int authType = 0;   //4 Triple 1 ssl Bidirectional Authentication
+
 static char glb_sn[32+1] = {0};
 void emqx_param_init()
 {
@@ -133,7 +135,7 @@ static void emqx_state_fun(void*args){
 	case MQTT_SIG_CLOSE_RSP:
 		API_LOG_DEBUG("tms mqtt close\r\n");
 		if (OsParamsGetNetMode() == 1) {//4g
-			ret =  OsMqttConnectEx(1,glb_sn, App_GetPosParam()->mqtt_endpoint,atoi(App_GetPosParam()->mqtt_port), 0,			60, 4);
+			ret = OsMqttConnectEx(1,glb_sn, App_GetPosParam()->mqtt_endpoint,atoi(App_GetPosParam()->mqtt_port), 0,			60, authType); 
 		}
 		API_LOG_DEBUG("app_vietpay_mqttConnect reconnect ret:%d\r\n", ret);
 		break;
@@ -161,16 +163,18 @@ static void emqx_state_fun(void*args){
 
 int app_emqx_service_start() {
 	int ret = -1;
-	int authType = 0;   //4 Triple 1 ssl Bidirectional Authentication
+
 	get_sn(glb_sn);
 	API_LOG_DEBUG("app_emqx_mqttConnect sn:%s\r\n", glb_sn);
+	API_LOG_DEBUG("app_emqx_mqttConnect mqtt_endpoint:%s\r\n", App_GetPosParam()->mqtt_endpoint);
+
 	if(strlen(App_GetPosParam()->mqtt_endpoint) == 0)
 		return -1;
 		
 	OsMqttSetStateHandleEx(1, emqx_state_fun);
 
 
-	if(memcmp(App_GetPosParam()->mqtt_auth_cert,"1",1) == 0) //4 Triple 1 ssl Bidirectional Authentication
+	if(App_GetPosParam()->mqtt_auth_cert == 0) 
 	{
 		if(strlen(App_GetPosParam()->mqtt_username) == 0 || strlen(App_GetPosParam()->mqtt_password) == 0)
 			OsMqttSetUserNamePwdEx(1, glb_sn, glb_sn);

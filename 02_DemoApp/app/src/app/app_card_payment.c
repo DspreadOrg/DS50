@@ -124,114 +124,11 @@ static int _GetPanFromTrack(char *pszTrack2, char *pszPan, int *pnPanLen)
  	}
  	return -1;
 }
-int ApiSecGetOfflinePin(unsigned char *pszPinBlock, unsigned int uiTimeoutMs, unsigned char PinFormat)
+
+void dispOfflineMskPin(unsigned char *maskPin)
 {
-	int ret = 0;
-	unsigned int Format = (PinFormat << 16);
-	unsigned int time = 0;
-	unsigned char pinDisplay[12+1] = {0};
-	unsigned char pin[12+1] = {0};
-	unsigned char disflag = 1;
-	unsigned char cardtype=0;
-	unsigned int lenMod;
-	unsigned char mod[256];
-	unsigned char cType = 0x01;
-	u32 lenE;
-	u8 e[256];
-	u32 lenRand; 
-	u8 rand[256];
-	unsigned char card_data[100]="0000000000000000000";
-	unsigned char data[100] = {0};
-	unsigned char data_len = 0;
-	unsigned char pin_len = 0;
-
-	if (PinFormat > 4)
-	{
-		return -3;
-		// return SDK_API_PARAM_ERR;
-	}
-	cardtype=1;
-    ret = OsSecSetPinpadOfflineModeParam(2,cardtype,  4, 12, uiTimeoutMs, lenMod, &mod, lenE,&e, lenRand, &rand);
-	if (ret != 0)
-	{
-		return -3;
-	}
-	ret = OsSecSetPinblockParam(Format, 1, 10, 4, 12, uiTimeoutMs, 19, card_data, 0, 0, NULL);
-	__TRACEASCDATA__("pin api_sec_setPinblock_param:%d\n", ret);
-	if (ret != 0)
-	{
-		return -3;
-	}
-	
-	//OsSysMsleep(10);
-	time = OsSysTick();
-	while (1)
-	{
-
-
-		if ((OsSysTick() - time) >= uiTimeoutMs*1000)
-		{
-			return -3;
-		}
-
-		if (disflag)
-		{
-
-			if(cType == 0x01)
-				app_lvgl_inputShow("Offline Plain PIN", pin, 0, 0, 0,true);
-			else
-				app_lvgl_inputShow("Offline Encipher PIN", pin, 0, 0, 0, true);
-		}
-		
-		ret = OsSecGetPinblockStatus(data, &data_len);
-		if ((ret == 0) && (data_len == 1))
-		{
-			switch (data[0])
-			{
-			case CANCEL:
-				// return SDK_API_USER_CANCEL;
-				time=OsSysTick();
-				return RETURN_CANCEL;
-			case CLEAR:
-				time=OsSysTick();
-				memset(pin, 0x00, sizeof(pin));
-				memset(pinDisplay, 0x00, sizeof(pinDisplay));
-				pin_len = 0;
-				break;
-			case ENTER:
-				if (pin_len == 0)
-				{
-					// return SDK_API_NO_PIN;
-					return 0;
-				}
-				break;
-			case '*':
-				time=OsSysTick();
-				pin[pin_len] = '*';
-				pinDisplay[pin_len] = '*';
-				pin_len++;
-				break;
-			default:
-				memset(pinDisplay + pin_len, 126, 12 - pin_len);
-				break;
-			}
-		}
-		else if (ret == 0)
-		{
-			memcpy(pszPinBlock, data+1, data[0]);
-			return data[0];
-		}
-		else
-		{
-			return -3;
-		}
-		OsSysMsleep(100);
-	}
-
-	return ret;
+	app_lvgl_inputShow("Offline Plain PIN", maskPin, 0, 0, 0,true);
 }
-
-
 int EMV_InputOfflinePasswd(char *pszPin)
 {
 	u32  startTick; 
@@ -253,7 +150,7 @@ int EMV_InputOfflinePasswd(char *pszPin)
 		OsSysMsleep(500);
 
 		waitflag=1;
-		iRet=ApiSecGetOfflinePin(pin,30,2);
+		iRet = OsGetOfflinePin(4,12,30,pin,dispOfflineMskPin);
 		waitflag=0;
 		if(iRet > 0)
 		{
@@ -266,105 +163,11 @@ int EMV_InputOfflinePasswd(char *pszPin)
 
 }
 
-
-/***********************************************
-��  �ܣ��û���������PIN
-��  ��: pan[IN]:        --�û�PAN
-		pszPin[out]:    --����8�ֽ�pinblock
-����ֵ��RETURN_SUCC     --�ɹ�
-		RETURN_BYPASSPIN--�û�������PIN�Ĳ���
-		RETURN_CANCEL   --����ȡ��(�û�����ȡ������ʱ��û����)
-**********************************************/
-int ApiSecGetPinBlockNew(unsigned char *card_data, unsigned char *pszPinBlock, unsigned int uiTimeoutMs, unsigned char PinFormat)
+void dispOnlineMskPin(unsigned char *maskPin)
 {
-
-	// unsigned char pwdlen= 0;
-	int ret = 0;
-	// unsigned int	uiRemainTime = 0;
-	unsigned char amount[32] = {0};
-	unsigned int Format = (PinFormat << 16);
-	unsigned int time = 0;
-	unsigned int timeout = 0;
-	unsigned char data[100] = {0};
-	unsigned char data_len = 0;
-	unsigned char pin_len = 0;
-	unsigned char pin[100] = {0};
-	unsigned char pinDisplay[9] = {0};
-	unsigned char disflag = 1;
-
-	time = OsSysTick();
-
-	if (PinFormat > 4)
-	{
-		return -3;
-	}
-	ret = OsSecSetPinblockParam(Format, 1, 10, 4, 12, uiTimeoutMs, strlen(card_data), card_data, 0, 0, NULL);
-	__TRACEASCDATA__("pin api_sec_setPinblock_param:%d\n", ret);
-	if (ret != 0)
-	{
-		return -1;
-	}
-	
-	while (1)
-	{
-
-		if ((OsSysTick() - time) >= uiTimeoutMs*1000)
-		{
-			return -3;
-		}
-
-		if (disflag)
-		{
-			app_lvgl_inputShow("Input Password", pin, 0, 0, 0, true);
-		}
-		ret = OsSecGetPinblockStatus(data, &data_len);
-		if ((ret == 0) && (data_len == 1))
-		{
-			switch (data[0])
-			{
-			case CANCEL:
-				time=OsSysTick();
-				return RETURN_CANCEL;
-			case CLEAR:
-				time=OsSysTick();
-				memset(pin, 0x00, sizeof(pin));
-				memset(pinDisplay, 0x00, sizeof(pinDisplay));
-				pin_len = 0;
-				break;
-			case ENTER:
-				if (pin_len == 0)
-				{
-					return 0; //PIN BYPASS
-				}
-				break;
-			case '*':
-				time=OsSysTick();
-				pin[pin_len] = '*';
-				pinDisplay[pin_len] = '*';
-				pin_len++;
-				break;
-			default:
-				memset(pinDisplay + pin_len, 126, 12 - pin_len);
-				break;
-			}
-		}
-		else if (ret == 0)
-		{
-			memcpy(pszPinBlock, data, data_len);
-			return data_len;
-		}
-		else
-		{
-			return -1;
-		}
-		OsSysMsleep(10);
-	}
-
-	return -1;
+	app_lvgl_inputShow("Input Password", maskPin, 0, 0, 0, true);
 }
-
-
-int EMV_InputOnlinePasswd(unsigned char *pan, char *pszPin)
+int EMV_InputOnlinePasswd(unsigned char *pan, char *pszPin,char *ksn)
 {
 	int ret=0;
 	char pinFormat = 0;
@@ -373,13 +176,15 @@ int EMV_InputOnlinePasswd(unsigned char *pan, char *pszPin)
 		app_beep_play();
 		isBeepPlay = 1;
 	}
-	__TRACEASCDATA__("pan : %s", pan);
+
+	API_LOG_DEBUG("EMV_InputOnlinePasswd pan : %s", pan);
 	app_dsp_play(0,"/ext/audio/english/dsp_pinconfirm.wav","Please input your pin", 1);
 	waitflag=1;
-    ret = ApiSecGetPinBlockNew(pan, pszPin, 30, 2);
+	ret = OsGetPinBlockDes(PIN_KEY_INDEX, pan,ISO_PIN_FORMAT_0,PINBLOCK_DES_TYPE_3DES, 4,12, 30,pszPin, dispOnlineMskPin);
+	// ret = OsGetPinBlockDukptDes(PIN_IPEK_INDEX,ISO_PIN_FORMAT_0,PINBLOCK_DES_TYPE_3DES, pan, 4,12, 30,pszPin,ksn, dispOnlineMskPin);
 	waitflag=0;
 
-	__TRACEASCDATA__("ApiSecGetPinBlockNew : %d", ret);
+	API_LOG_DEBUG("OsGetPinBlockDukptDes : %d", ret);
 	inputpinpassward=true;	
 	 if(ret == 0)
 	 { 
@@ -799,11 +604,15 @@ int inputPasswd(int type, char *pszPin)
 {
 	API_LOG_DEBUG("Start entering password......"); 
 	int ret;
+	char ksn[12] = {0};
 	if(type == EMV_ONLINEPIN_INPUT)
 	{
-		ret = EMV_InputOnlinePasswd(gEmvInfo.szPan,pszPin);
+		ret = EMV_InputOnlinePasswd(gEmvInfo.szPan,pszPin,ksn);
 		if(ret > 0)
 		{
+			API_LOG_DEBUG("pin entered successfully......"); 
+			API_LOG_DEBUG_HEX(pszPin,8);
+			API_LOG_DEBUG_HEX(ksn,8);
 			Pub_BcdToAsc(pszPin,gEmvInfo.szPinBlock,8);
 		}
 	}

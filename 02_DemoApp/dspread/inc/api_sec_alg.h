@@ -29,7 +29,7 @@ s32 OsSecCalcData(s32 mode, u8 alg, u32 idx, u8 *pData, u32 dataLen, u8 *pDataOu
 Function Purpose:Set pinblock param
 Input Paramters: 
               		mode: Bit[31:24],Key type 0:MK/SK,1:DUKPT
-              		      Bit[24:16],Pin calc mode Set to 0
+              		      Bit[23:16],Pin calc mode Set to 0
               	    alg: 0:DES,1:3DES,2:SM4,3:AES
               	    idx: Key index
               	    minLen: Pin minimun length

@@ -15,13 +15,19 @@
 #define PIN_KEY_INDEX           10
 #define DATA_KEY_INDEX         11
 
-#define CFG_APP_DEBUG_MODE          1    //1 DEBUG      0  PROD
+#define PIN_IPEK_INDEX 0x01
+#define EMV_IPEK_INDEX 0x02
+#define TRK_IPEK_INDEX 0x03
+
+#define OFFLINE_TEST 0             // FOR OFFLINE TEST
+
+#define CFG_APP_DEBUG_MODE          0    // if set 1 ,will update mksk key and dukpt key to device
 
 typedef struct
 {
     char mqtt_endpoint[128];
     char mqtt_port[8];
-    char mqtt_auth_cert[8];
+    char mqtt_auth_cert;
     char mqtt_username[64];
     char mqtt_password[64];
     char mqtt_topic[32];

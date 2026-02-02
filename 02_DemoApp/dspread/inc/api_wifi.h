@@ -109,8 +109,8 @@ int OsWifiSend(int sockid,char *data, int datalen, int timeout);
 int OsWifiRecv(int sockid, unsigned char *pucdata, unsigned short iLen, unsigned int uiTimeOut);
 /*
 * Description: The certificate is downloaded, and it is recommended to restart it after the download is complete. You need to configure SSL before connecting to SSL
-* Input: cType:0??client_ca?? 1??client_cert?? 2??client_key
-		cType:3??mqtt_ca?? 4??mqtt_cert?? 5??mqtt_key
+* Input: cType:0 client_ca  1 client_cert  2 client_key
+		cType:3? mqtt_ca  4 mqtt_cert  5 mqtt_key
 		pchFileName: the full path of the certificate. Max_size: The maximum file size
 * Output:N
 * Return: <0:

@@ -135,7 +135,7 @@ endfunction()
 
 
 if(CONFIG_APPIMG_LOAD_FLASH)
-    set(target S20_app)
+    set(target DS50_app)
     add_appimg(${target} ${flash_ldscript}
 		${MAIN_SOURCES_FILE}
 		${PUB_SOURCES_FILE}

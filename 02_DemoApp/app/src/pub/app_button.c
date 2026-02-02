@@ -1729,7 +1729,7 @@ void app_handle_paytype(u32 button) {
 	app_lvgl_menuShow("PayType", payTypeMenuItems, sizeof(payTypeMenuItems) / sizeof(payTypeMenuItems[0]));
 	trans_thread_mutexUnlock();
 }
-
+//"sn|amount|topic/sn"
 int pack_qr_data(char *buff,char *amount)
 {
 	char sn[32] = {0};

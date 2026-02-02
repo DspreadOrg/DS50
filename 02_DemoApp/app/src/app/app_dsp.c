@@ -22,7 +22,6 @@ static unsigned int m_dsp_mutext_lock = 0;
 #define	DSP_MUTEX_UNLOCK	  if(m_dsp_mutext_lock!=0)OsSysSemSignal(m_dsp_mutext_lock);
 
 
-#define OFFLINE_TEST 0
 
 int app_dsp_getInitFlag(void) {
 	if (strlen(serialID) == 0) {
@@ -668,18 +667,11 @@ int app_dsp_transactionFlow(
 									memcpy(pinfos->acqAuthCode, item->valuestring, strlen(item->valuestring));
 							}
 
-							item = cJSON_GetObjectItem(row, "date");
+							item = cJSON_GetObjectItem(row, "transDatetime");
 							if (item != NULL) {
 								if (item->valuestring != NULL)
 									memcpy(pinfos->transDatetime, item->valuestring, strlen(item->valuestring));
 							}
-
-							item = cJSON_GetObjectItem(row, "time");
-							if (item != NULL) {
-								if (item->valuestring != NULL)
-									sprintf(pinfos->transDatetime+strlen(pinfos->transDatetime), " %s", item->valuestring);
-							}
-
 
 							item = cJSON_GetObjectItem(row, "transAmount");
 							if (item != NULL) {
@@ -938,6 +930,44 @@ exit:
 	return ret;
 }
 
+int mask_card_number_static(const char *card_no, int keep_prefix, int keep_suffix, 
+                           char mask_char, char *output) {
+    if (card_no == NULL || output == NULL) {
+        return -1;
+    }
+    if (keep_prefix < 0 || keep_suffix < 0) {
+        return -1;
+    }
+
+    int card_len = strlen(card_no);
+    for (int i = 0; i < card_len; i++) {
+        if (!isdigit(card_no[i])) {
+            return -2;
+        }
+    }
+
+    if (card_len <= keep_prefix + keep_suffix) {
+        strncpy(output, card_no, card_len);
+        return 0;
+    }
+
+    int mask_len = card_len - keep_prefix - keep_suffix; 
+    int pos = 0; //
+
+    strncpy(output + pos, card_no, keep_prefix);
+    pos += keep_prefix;
+
+    for (int i = 0; i < mask_len && pos < card_len - 1; i++) {
+        output[pos++] = mask_char;
+    }
+
+    strncpy(output + pos, card_no + (card_len - keep_suffix), keep_suffix);
+    pos += keep_suffix;
+
+	output[pos] = '\0';
+
+    return 0;
+}
 int app_dsp_cardPay(char* url, APPEMVINFO *emvInfo,EmvOnlineData_t* pOnlineData) 
 {
 	DSP_MUTEX_LOCK;
@@ -978,7 +1008,9 @@ int app_dsp_cardPay(char* url, APPEMVINFO *emvInfo,EmvOnlineData_t* pOnlineData)
 	cJSON_AddStringToObject(root, "transType", "SALE");
 	cJSON_AddStringToObject(root, "payType", "CARD");
 	cJSON_AddStringToObject(root, "transAmount", cardpayamount);
-	cJSON_AddStringToObject(root, "cardNo", emvInfo->szPan);
+	memset(tempBuf, 0, 512);
+	mask_card_number_static(emvInfo->szPan, 6, 4, '*', tempBuf);
+	cJSON_AddStringToObject(root, "cardNo", tempBuf);
 	cJSON_AddStringToObject(root, "cardOrg", emvInfo->cardOrg);
 	cJSON_AddStringToObject(root, "cardSN", emvInfo->szCardSerialNo);
 

@@ -14,55 +14,112 @@ POS_PARAM_ST* App_GetPosParam(void)
 void App_PosParamProcess(char *pchParam)
 { 
 	cJSON* root = NULL;
+	cJSON* mqtt = NULL;
+	cJSON* payment = NULL;
     cJSON* item = NULL;
 	do
 	{
 		root = cJSON_Parse(pchParam);
 		if (root == NULL)
 			break;
-		item = cJSON_GetObjectItem(root, "mqtt_endpoint");
-		if(item)
-			memcpy(g_posParam.mqtt_endpoint,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_port");
-		if(item)
-			memcpy(g_posParam.mqtt_port,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_auth_cert");
-		if(item)
-			memcpy(g_posParam.mqtt_auth_cert,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_username");
-		if(item)
-			memcpy(g_posParam.mqtt_username,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_password");
-		if(item)
-			memcpy(g_posParam.mqtt_password,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "mqtt_topic");
-		if(item)
-			memcpy(g_posParam.mqtt_topic,item->valuestring,strlen(item->valuestring));
-
-		item = cJSON_GetObjectItem(root, "pgw_endpoint");
-		if(item)
-			memcpy(g_posParam.pgw_endpoint,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "pgw_port");
-		if(item)
-			memcpy(g_posParam.pgw_port,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "pgw_auth_type");
-		if(item)
-			memcpy(g_posParam.pgw_auth_type,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "pgw_ssl_cert");
-		if(item)
-			g_posParam.pgw_ssl_cert = item->valueint;
-		item = cJSON_GetObjectItem(root, "pgw_api_key");
-		if(item)
-			memcpy(g_posParam.pgw_api_key,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "pgw_api_key_expiry");
-		if(item)
-			memcpy(g_posParam.pgw_api_key_expiry,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "pgw_api_sale");
-		if(item)
-			memcpy(g_posParam.pgw_api_sale,item->valuestring,strlen(item->valuestring));
-		item = cJSON_GetObjectItem(root, "pgw_api_details");
-		if(item)
-			memcpy(g_posParam.pgw_api_details,item->valuestring,strlen(item->valuestring));
+		mqtt = cJSON_GetObjectItem(root, "mqtt");
+		if(mqtt)
+		{
+			item = cJSON_GetObjectItem(mqtt, "mqtt_endpoint");
+			if(item)
+				memcpy(g_posParam.mqtt_endpoint,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(mqtt, "mqtt_port");
+			if(item)
+				memcpy(g_posParam.mqtt_port,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(mqtt, "mqtt_auth_cert");
+			if(item)
+				g_posParam.mqtt_auth_cert =  item->valueint;
+			item = cJSON_GetObjectItem(mqtt, "mqtt_username");
+			if(item)
+				memcpy(g_posParam.mqtt_username,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(mqtt, "mqtt_password");
+			if(item)
+				memcpy(g_posParam.mqtt_password,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(mqtt, "mqtt_topic");
+			if(item)
+				memcpy(g_posParam.mqtt_topic,item->valuestring,strlen(item->valuestring));
+		}
+		else
+		{
+			item = cJSON_GetObjectItem(root, "mqtt_endpoint");
+			if(item)
+				memcpy(g_posParam.mqtt_endpoint,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "mqtt_port");
+			if(item)
+				memcpy(g_posParam.mqtt_port,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "mqtt_auth_cert");
+			if(item)
+				g_posParam.mqtt_auth_cert =  item->valueint;
+			item = cJSON_GetObjectItem(root, "mqtt_username");
+			if(item)
+				memcpy(g_posParam.mqtt_username,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "mqtt_password");
+			if(item)
+				memcpy(g_posParam.mqtt_password,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "mqtt_topic");
+			if(item)
+				memcpy(g_posParam.mqtt_topic,item->valuestring,strlen(item->valuestring));
+		}
+		payment = cJSON_GetObjectItem(root, "payment");
+		if(payment)
+		{
+			item = cJSON_GetObjectItem(payment, "pgw_endpoint");
+			if(item)
+				memcpy(g_posParam.pgw_endpoint,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(payment, "pgw_port");
+			if(item)
+				memcpy(g_posParam.pgw_port,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(payment, "pgw_auth_type");
+			if(item)
+				memcpy(g_posParam.pgw_auth_type,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(payment, "pgw_ssl_cert");
+			if(item)
+				g_posParam.pgw_ssl_cert = item->valueint;
+			item = cJSON_GetObjectItem(payment, "pgw_api_key");
+			if(item)
+				memcpy(g_posParam.pgw_api_key,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(payment, "pgw_api_key_expiry");
+			if(item)
+				memcpy(g_posParam.pgw_api_key_expiry,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(payment, "pgw_api_sale");
+			if(item)
+				memcpy(g_posParam.pgw_api_sale,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(payment, "pgw_api_details");
+			if(item)
+				memcpy(g_posParam.pgw_api_details,item->valuestring,strlen(item->valuestring));
+		}
+		else
+		{
+			item = cJSON_GetObjectItem(root, "pgw_endpoint");
+			if(item)
+				memcpy(g_posParam.pgw_endpoint,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "pgw_port");
+			if(item)
+				memcpy(g_posParam.pgw_port,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "pgw_auth_type");
+			if(item)
+				memcpy(g_posParam.pgw_auth_type,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "pgw_ssl_cert");
+			if(item)
+				g_posParam.pgw_ssl_cert = item->valueint;
+			item = cJSON_GetObjectItem(root, "pgw_api_key");
+			if(item)
+				memcpy(g_posParam.pgw_api_key,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "pgw_api_key_expiry");
+			if(item)
+				memcpy(g_posParam.pgw_api_key_expiry,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "pgw_api_sale");
+			if(item)
+				memcpy(g_posParam.pgw_api_sale,item->valuestring,strlen(item->valuestring));
+			item = cJSON_GetObjectItem(root, "pgw_api_details");
+			if(item)
+				memcpy(g_posParam.pgw_api_details,item->valuestring,strlen(item->valuestring));
+		}
 		/* code */
 	} while (0);
 
@@ -172,12 +229,21 @@ int App_PosParamInit(void)
 	unsigned char PINKey[32]="\x4A\x2D\xC7\x50\x9E\x20\xFD\x47\x60\xBF\x3F\xEE\xB8\xC8\xE6\x5F";
 	unsigned char DaTaKey[32]="\x4A\x2D\xC7\x50\x9E\x20\xFD\x47\x60\xBF\x3F\xEE\xB8\xC8\xE6\x5F";
 	unsigned char kcv[4]="\xBB\x02\x56\x9C";
-
-
 	nRet= OsSecUpdatePlainKey(0, 0x01, 0, mainKey, 16);
+	
 
 	nRet= OsSecUpdateCipherKey(0x10, 0x1, 1, 0, PIN_KEY_INDEX, PINKey, 16, 1, kcv, 4);
 	nRet= OsSecUpdateCipherKey(0x10, 0x1, 1, 0, DATA_KEY_INDEX, DaTaKey, 16, 1, kcv, 4);
+
+	unsigned char ipek[16] = "\x55\x55\x55\x55\x55\x55\x55\x55\x66\x66\x66\x66\x66\x66\x66\x66";
+	unsigned char ipek_kcv[4]="\xDD\xB7\x36\x8E";
+	unsigned char ksn[10] = "\x50\x00\x25\x12\x01\x00\x02\xE0\x00\x00";
+
+	nRet = OsSecUpdateDukpt(0,0,PIN_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
+	API_LOG_DEBUG("-api_sec_updateDukpt ret=%d",nRet);
+
+	nRet = OsSecUpdateDukpt(0,0,EMV_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
+	nRet = OsSecUpdateDukpt(0,0,TRK_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
 
 	if(!Emv_AidPramAndCapkExist())
 	{
