@@ -133,7 +133,8 @@ void app_main(void* param)
 	g_boxReady = 1;
 	app_button_semSig();
 	app_standby_wait();	
-	handle_menu(0);
+	handle_menu(-1);
+
 exit:
 	MainStatus=1;
 	OsSysThreadDelete(thread_mainID);

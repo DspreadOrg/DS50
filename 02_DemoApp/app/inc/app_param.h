@@ -1,15 +1,15 @@
 #ifndef _APP_PARAM_H
 #define _APP_PARAM_H
-#define FILE_POSPARAM           "/ext/cust/posparam.ini"  
+#define FILE_POSPARAM           "/ext/cust/posparam.ini"
 #define FILE_EMV_APP_PARAM           "/ext/cust/emv_app.bin"
 #define FILE_EMV_CAPK_PARAM         "/ext/cust/emv_capk.bin"
 
-#define APP_VERSION          "V1.0.2"                //LA-APP version number
+#define APP_VERSION          "V1.0.3"                //LA-APP version number
 #define DEVICE_MODEL          "DS50"
-#define APP_VERSIONCODE      41 
+#define APP_VERSIONCODE      41
 #define MCHNTCD "974347473720001"
 #define DEVICEID "00000138"
-#define DSP_URL "https://www.dspread.com"
+#define STATIC_QR_URL "https://www.dspread.com"
 #define HTTP_TRYCNT 3
 
 #define PIN_KEY_INDEX           10

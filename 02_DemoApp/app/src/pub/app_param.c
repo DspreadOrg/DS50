@@ -200,7 +200,7 @@ int App_PosParamInit(void)
 
 	API_LOG_DEBUG("g_posParam.mqtt_endpoint=[%s]",g_posParam.mqtt_endpoint);
 	API_LOG_DEBUG("g_posParam.mqtt_port=[%s]",g_posParam.mqtt_port);
-	API_LOG_DEBUG("g_posParam.mqtt_auth_cert=[%s]",g_posParam.mqtt_auth_cert);
+	API_LOG_DEBUG("g_posParam.mqtt_auth_cert=[%d]",g_posParam.mqtt_auth_cert);
 	API_LOG_DEBUG("g_posParam.mqtt_username=[%s]",g_posParam.mqtt_username);
 	API_LOG_DEBUG("g_posParam.mqtt_password=[%s]",g_posParam.mqtt_password);
 	API_LOG_DEBUG("g_posParam.mqtt_topic=[%s]",g_posParam.mqtt_topic);
@@ -239,11 +239,11 @@ int App_PosParamInit(void)
 	unsigned char ipek_kcv[4]="\xDD\xB7\x36\x8E";
 	unsigned char ksn[10] = "\x50\x00\x25\x12\x01\x00\x02\xE0\x00\x00";
 
-	nRet = OsSecUpdateDukpt(0,0,PIN_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
-	API_LOG_DEBUG("-api_sec_updateDukpt ret=%d",nRet);
+	// nRet = OsSecUpdateDukpt(0,0,PIN_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
+	// API_LOG_DEBUG("-api_sec_updateDukpt ret=%d",nRet);
 
-	nRet = OsSecUpdateDukpt(0,0,EMV_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
-	nRet = OsSecUpdateDukpt(0,0,TRK_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
+	// nRet = OsSecUpdateDukpt(0,0,EMV_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
+	// nRet = OsSecUpdateDukpt(0,0,TRK_IPEK_INDEX,16,ipek,ksn,ipek_kcv);
 
 	if(!Emv_AidPramAndCapkExist())
 	{

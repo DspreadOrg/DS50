@@ -190,7 +190,7 @@ void dsp_termianalInit(void)
 	int ret = 0;
 
 	app_lvgl_mainShow(DSP_WAITTING_IMG, 100, 100, "waiting...", LV_COLOR_DSP_BLUE);
-	ret = app_dsp_terminalInit(DSP_URL,
+	ret = app_dsp_terminalInit(STATIC_QR_URL,
 								  outdataKey, outpinKey,
 								  outmerchantId, outtid,
 								  outmerchantName, msgOut);
@@ -289,7 +289,7 @@ static void handle_clear(void)
 			// sprintf(amountFormat,"%d.%d",atoi(tradeInfo[0].money)/100, atoi(tradeInfo[0].money) % 100);
 			ret = app_dsp_qrcodePayRefund(
 				MCHNTCD, DEVICEID,
-				DSP_URL, tradeInfo[0].money,
+				STATIC_QR_URL, tradeInfo[0].money,
 				tradeInfo[0].traceNo, tradeInfo[0].batchNo, &transState,
 				msgOut);
 			if (ret == 0)
@@ -635,7 +635,12 @@ static void handle_cancel(void)
 		API_LOG_DEBUG("button cancel gTransThreadFlag:%d\r\n", gTransThreadFlag);
 		return;
 	}
-	if (current_mode == MODE_MENU || current_mode == MODE_NORMAL || current_mode == MODE_PLUS)
+	if(current_mode == MODE_MENU)
+	{
+		current_mode = MODE_MAIN_QR;
+		app_static_qrcode_show(STATIC_QR_URL,"Neokred");
+	}
+	else if (current_mode == MODE_MENU || current_mode == MODE_NORMAL || current_mode == MODE_PLUS)
 	{
 		current_mode = MODE_MENU;
 		app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
@@ -757,10 +762,18 @@ void handle_menu(u32 button)
 {
 	API_LOG_DEBUG("menu show,mode=%d\r\n",current_mode);
 	//if ((current_mode == MODE_NORMAL || current_mode == MODE_MENU || current_mode==MODE_INPUT_AMT_SHOW) && gTransThreadFlag == false ){
-	if (gTransThreadFlag == false )
+	if(button == -1)
 	{
-		current_mode = MODE_MENU;
-		app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
+		current_mode = MODE_MAIN_QR;
+		app_static_qrcode_show(STATIC_QR_URL,"Neokred");
+	}
+	else
+	{
+		if (gTransThreadFlag == false )
+		{
+			current_mode = MODE_MENU;
+			app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
+		}
 	}
 }
 
@@ -821,7 +834,7 @@ static void handle_pgup(void)
 			transRecordcurpage--;
 			int ret = app_dsp_transactionFlow(
 				MCHNTCD, DEVICEID,
-				DSP_URL, transRecordcurpage,
+				STATIC_QR_URL, transRecordcurpage,
 				transRecordTotalpageSize, &transRecordTotal, tradeInfo,
 				msgOut);
 
@@ -894,7 +907,7 @@ static void handle_pgdown(void)
 			transRecordcurpage++;
 			int ret = app_dsp_transactionFlow(
 				MCHNTCD, DEVICEID,
-				DSP_URL, transRecordcurpage,
+				STATIC_QR_URL, transRecordcurpage,
 				transRecordTotalpageSize, &transRecordTotal, tradeInfo,
 				msgOut);
 
@@ -980,7 +993,7 @@ static void handle_trans_query(void)
 	transRecordcurpage = 1;
 	int ret = app_dsp_transactionFlow(
 		MCHNTCD, DEVICEID,
-		DSP_URL, transRecordcurpage,
+		STATIC_QR_URL, transRecordcurpage,
 		transRecordTotalpageSize, &transRecordTotal, tradeInfo,
 		msgOut);
 
@@ -1557,7 +1570,7 @@ static void handle_sign_in(void)
 	int ret = -1;
 	char errorMsg[32] = {0};
 	app_lvgl_mainShow(DSP_WAITTING_IMG, 100, 100, "Connecting To Server", LV_COLOR_DSP_BLUE);
-	ret = app_dsp_login(MCHNTCD, DEVICEID, DSP_URL, gShopId, gStaffId, errorMsg);
+	ret = app_dsp_login(MCHNTCD, DEVICEID, STATIC_QR_URL, gShopId, gStaffId, errorMsg);
 	current_mode = MODE_SYS_PARAMS_SIGNIN_TIP;
 	if (ret != 0)
 	{
@@ -1578,7 +1591,7 @@ static void handle_sign_in(void)
 		char msgOut[64] = {0};
 		ret = app_dsp_getStaticQrcode(
 			MCHNTCD, DEVICEID,
-			DSP_URL, gQrUrl, gMchntcnName,
+			STATIC_QR_URL, gQrUrl, gMchntcnName,
 			msgOut);
 		API_LOG_DEBUG("app_dsp_getStaticQrcode ret:%d,gQrUrl:%s,mchntcnNameStr:%s\r\n",
 					  ret, gQrUrl, gMchntcnName);

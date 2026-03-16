@@ -630,6 +630,7 @@ int app_dsp_transactionFlow(
 			if (respCode) {
 				if (strcmp(respCode->valuestring, "00")) {
 						ret = -1;
+						strcpy(msgOut, "no records");
 						goto exit;
 				}
 				else {

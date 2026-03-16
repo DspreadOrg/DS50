@@ -12,7 +12,7 @@ char orgOrderId_len = 0;
 
 bool emqt_mqtt_lock = false;
 
-int authType = 0;   //4 Triple 1 ssl Bidirectional Authentication
+int authType = 0;   // 1 TCP 2 SSL no cert 3 SSL verify server 4 SSL verify client 5 SSL verify both
 
 static char glb_sn[32+1] = {0};
 void emqx_param_init()
@@ -119,7 +119,9 @@ static void appMqttMessageArrived(void*args)
 		app_seg_showMoney(dspAmt);
 		app_money_play(dspAmt);
 
-		disp_main_menu();
+		OsSysMsleep(1000);
+		app_seg_showMoney("0.00");
+		handle_menu(-1);
     }
 
 	emqt_mqtt_lock = false;
@@ -180,9 +182,17 @@ int app_emqx_service_start() {
 			OsMqttSetUserNamePwdEx(1, glb_sn, glb_sn);
 		else
 			OsMqttSetUserNamePwdEx(1, App_GetPosParam()->mqtt_username, App_GetPosParam()->mqtt_password);
-		authType = 4; //4 Triple 1 ssl Bidirectional Authentication
+		authType = 1; // 1 TCP 2 SSL no cert 3 SSL verify server 4 SSL verify client 5 SSL verify both
 	}
-	else  
+	else if(App_GetPosParam()->mqtt_auth_cert == 1)
+	{
+		if(strlen(App_GetPosParam()->mqtt_username) == 0 || strlen(App_GetPosParam()->mqtt_password) == 0)
+			OsMqttSetUserNamePwdEx(1, glb_sn, glb_sn);
+		else
+			OsMqttSetUserNamePwdEx(1, App_GetPosParam()->mqtt_username, App_GetPosParam()->mqtt_password);
+		authType = 2;  // 1 TCP 2 SSL no verify 3 SSL verify server 4 SSL verify client 5 SSL verify both
+	}
+	else  if(App_GetPosParam()->mqtt_auth_cert == 4)
 	{
 		if (OsParamsGetNetMode() == 1) {//4g
 			OsWlSslSetFile("/ext/key/ServerCA.pem", "/ext/key/deviceCert.pem", "/ext/key/deviceKey.pem");
@@ -195,7 +205,12 @@ int app_emqx_service_start() {
 			ret = OsWifiLoadCrt(5, "/ext/key/deviceKey.pem", 3000);
 			API_LOG_DEBUG("OsWifiLoadCrt ret:%d\r\n", ret);
 		}
-		authType = 1; //4 Triple 1 ssl Bidirectional Authentication
+		authType = 5; // 1 TCP 2 SSL no cert 3 SSL verify server 4 SSL verify client 5 SSL verify both
+	}
+	else
+	{
+		API_LOG_DEBUG("app_emqx_mqttConnect  unknown mqtt_auth_cert\r\n");
+		return -1;
 	}
 
 	ret = OsMqttConnectEx(1,glb_sn, App_GetPosParam()->mqtt_endpoint,atoi(App_GetPosParam()->mqtt_port), 0,			60, authType); 
@@ -289,6 +304,6 @@ exit:
 	OsSysAppUnLock();
 	app_seg_showMoney("0.00");
 	inputpinpassward = false;
-	handle_menu(0);
+	handle_menu(-1);
 	return nRet;
 }

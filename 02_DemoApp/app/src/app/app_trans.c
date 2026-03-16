@@ -205,8 +205,12 @@ int UnLockFlag=0;
 					 API_LOG_DEBUG("app_trans_process g_qrOutTradeNo:%s\r\n", g_qrOutTradeNo);
 					 WaitAppUnlock();
 				 }
-				 app_transaction_resultShow(tradeType, 2, moneyBuf, tradeNoStr, "Transaction Fail");
-				 app_dsp_play(0,"/ext/audio/english/dsp_transactionfail.wav","transaction fail", 1);
+				 if(ret != -1 && ret != -8)
+				 {
+					app_transaction_resultShow(tradeType, 2, moneyBuf, tradeNoStr, "Transaction Fail");
+					app_dsp_play(0,"/ext/audio/english/dsp_transactionfail.wav","transaction fail", 1);
+				 }
+
 			 }
 			 if(initFlag==1)
 			 {
@@ -222,7 +226,7 @@ int UnLockFlag=0;
 				 OsSysGetHeapInfo(&memsize, &avail_size, &avail_block_size);
 				 API_LOG_DEBUG("app_trans_process end memory left:%u,%u,%u\r\n", memsize, avail_size, avail_block_size);
 			 }
-			 handle_menu(0);
+			 handle_menu(-1);
 			 OsSysAppUnLock();
 		 }
 		 trans_thread_mutexUnlock();
@@ -262,7 +266,7 @@ void app_transthread_paycheck(void* params) {
 				UnLockFlag=1;
 				API_LOG_DEBUG("app_dsp_checkPay start\r\n");
 				ret = app_dsp_checkPay(
-					MCHNTCD, DEVICEID, DSP_URL, g_qrOutTradeNo, &tranState,
+					MCHNTCD, DEVICEID, STATIC_QR_URL, g_qrOutTradeNo, &tranState,
 					msgTips);
 				API_LOG_DEBUG("app_dsp_checkPay end\r\n");
 				UnLockFlag=0;
