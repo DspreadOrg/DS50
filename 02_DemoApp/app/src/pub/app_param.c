@@ -22,6 +22,13 @@ void App_PosParamProcess(char *pchParam)
 		root = cJSON_Parse(pchParam);
 		if (root == NULL)
 			break;
+		item = cJSON_GetObjectItem(root, "static_qr_url");
+		if(item)
+			memcpy(g_posParam.static_qr_url,item->valuestring,strlen(item->valuestring));
+		item = cJSON_GetObjectItem(root, "cust_name");
+		if(item)
+			memcpy(g_posParam.cust_name,item->valuestring,strlen(item->valuestring));
+
 		mqtt = cJSON_GetObjectItem(root, "mqtt");
 		if(mqtt)
 		{

@@ -36,6 +36,9 @@ typedef enum {
 	MODE_LOGSWITCH_SET,
 	MODE_INPUT_AMT_SHOW,
 	MODE_PAY_TYPE_SET,
+	MODE_TRANS_DQR,
+	MODE_TRANS_CARDPAY,
+
 }AppMode;
 extern AppMode current_mode;
 
@@ -81,6 +84,9 @@ void app_handle_paytype(u32 button);
 void app_handle_qrpay(u32 button) ;
 void app_handle_cardpay(u32 button);
 void  disp_main_menu();
+
+void start_timeout_check(int timeout);
+void stop_timeout_check();
 
 typedef struct {
     u32 key;

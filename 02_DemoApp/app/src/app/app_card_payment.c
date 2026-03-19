@@ -180,7 +180,7 @@ int EMV_InputOnlinePasswd(unsigned char *pan, char *pszPin,char *ksn)
 	API_LOG_DEBUG("EMV_InputOnlinePasswd pan : %s", pan);
 	app_dsp_play(0,"/ext/audio/english/dsp_pinconfirm.wav","Please input your pin", 1);
 	waitflag=1;
-	ret = OsGetPinBlockDes(PIN_KEY_INDEX,ISO_PIN_FORMAT_0,PINBLOCK_DES_TYPE_3DES, pan, 4,12, 30,pszPin, dispOnlineMskPin);
+	ret = OsGetPinBlockDes(PIN_KEY_INDEX,ISO_PIN_FORMAT_0,PINBLOCK_DES_TYPE_3DES, pan,4,12, 30,pszPin, dispOnlineMskPin);
 	// ret = OsGetPinBlockDukptDes(PIN_IPEK_INDEX,ISO_PIN_FORMAT_0,PINBLOCK_DES_TYPE_3DES, pan, 4,12, 30,pszPin,ksn, dispOnlineMskPin);
 	waitflag=0;
 

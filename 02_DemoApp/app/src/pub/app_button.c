@@ -62,7 +62,11 @@ char g_dynamic_amountFormat[64]={0};
 char pinpassward[32]={0};
 bool device_Status = true;
 
-
+#define APP_DISP_TIMEOUT  30 // seconds
+bool gAppDspTimeoutThreadFlag = false;
+int g_app_disp_timeout = 0; // second
+bool g_app_disp_timeout_flag = false;
+u32 thread_timeoutID = 0;
 
 static const KeyHandler key_handlers[] = {
 	{KEYPAD_POWER_LONG, MODE_ANY, handle_power},
@@ -363,7 +367,22 @@ static void handle_digit(u32 button)
 	u32 last_button;
 	int input_mode = 0;
 
-	if (current_mode == MODE_NORMAL || current_mode == MODE_PLUS)
+	if(current_mode == MODE_MAIN_QR)
+	{
+		if (button_length < MAX_AMOUNT_LENGTH)
+		{
+			if (button_length == 0 && button == DIGITAL0)
+			{
+				return;
+			}
+			amount[button_length++] = (char)button;
+			amount[button_length] = '\0';
+			memset(g_dynamic_amountFormat, 0, sizeof(g_dynamic_amountFormat));
+			app_amount_formatting(amount, g_dynamic_amountFormat);
+			app_seg_showMoney(g_dynamic_amountFormat);
+		}
+	}
+	else if (current_mode == MODE_NORMAL || current_mode == MODE_PLUS)
 	{
 		if (gTransThreadFlag == false)
 		{
@@ -458,7 +477,11 @@ static void handle_enter(void)
 	int keyPadMode = 0;
 	int showCnt = 0;
 	char *ssidMenus[32] = {0};
-	if(current_mode == MODE_INPUT_AMT_SHOW)
+	if(current_mode == MODE_MAIN_QR)
+	{
+		app_handle_paytype(0);
+	}
+	else if(current_mode == MODE_INPUT_AMT_SHOW)
 	{
 		app_handle_paytype(0);
 	}
@@ -635,10 +658,18 @@ static void handle_cancel(void)
 		API_LOG_DEBUG("button cancel gTransThreadFlag:%d\r\n", gTransThreadFlag);
 		return;
 	}
-	if(current_mode == MODE_MENU)
+	if(current_mode == MODE_MAIN_QR || current_mode == MODE_PAY_TYPE_SET || current_mode == MODE_TRANS_DQR)
+	{
+		handle_menu(-1);
+		stop_timeout_check();
+	}
+	else if(current_mode == MODE_MENU)
 	{
 		current_mode = MODE_MAIN_QR;
-		app_static_qrcode_show(STATIC_QR_URL,"Neokred");
+		if(strlen(App_GetPosParam()->static_qr_url) == 0)
+			app_static_qrcode_show(STATIC_QR_URL,"Dspread");
+		else
+			app_static_qrcode_show(App_GetPosParam()->static_qr_url,App_GetPosParam()->cust_name);	
 	}
 	else if (current_mode == MODE_MENU || current_mode == MODE_NORMAL || current_mode == MODE_PLUS)
 	{
@@ -755,6 +786,7 @@ static void handle_cancel(void)
 		OsSegShowMoney("0.00");
 		app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
 		trans_thread_mutexUnlock();
+
 		current_mode = MODE_MENU;
 	}
 }
@@ -764,12 +796,23 @@ void handle_menu(u32 button)
 	//if ((current_mode == MODE_NORMAL || current_mode == MODE_MENU || current_mode==MODE_INPUT_AMT_SHOW) && gTransThreadFlag == false ){
 	if(button == -1)
 	{
+		stop_timeout_check();
 		current_mode = MODE_MAIN_QR;
-		app_static_qrcode_show(STATIC_QR_URL,"Neokred");
+		if(strlen(App_GetPosParam()->static_qr_url) == 0)
+			app_static_qrcode_show(STATIC_QR_URL,"Dspread");
+		else
+			app_static_qrcode_show(App_GetPosParam()->static_qr_url,App_GetPosParam()->cust_name);	
+
+		memset(amount, 0, sizeof(amount));
+		memset(previous_amount, 0, sizeof(previous_amount));
+		memset(g_dynamic_amountFormat,0,sizeof(g_dynamic_amountFormat));
+		memset(&point, 0, sizeof(point));
+		button_length = 0;
+		OsSegShowMoney("0.00");
 	}
 	else
 	{
-		if (gTransThreadFlag == false )
+		if (gTransThreadFlag == false &&  current_mode == MODE_MAIN_QR)
 		{
 			current_mode = MODE_MENU;
 			app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
@@ -1738,8 +1781,12 @@ void app_handle_input_amt(u32 button) {
 
 void app_handle_paytype(u32 button) {
 	trans_thread_mutexLock();
-	current_mode = MODE_PAY_TYPE_SET;
-	app_lvgl_menuShow("PayType", payTypeMenuItems, sizeof(payTypeMenuItems) / sizeof(payTypeMenuItems[0]));
+	if (atoi(amount) != 0 && button_length > 0)
+	{
+		app_dsp_play(APP_AUDIO_PLAY, "/ext/audio/english/dsp_qrcodescan.wav", "Please select pay type", 0);
+		current_mode = MODE_PAY_TYPE_SET;
+		app_lvgl_menuShow("PayType", payTypeMenuItems, sizeof(payTypeMenuItems) / sizeof(payTypeMenuItems[0]));
+	}
 	trans_thread_mutexUnlock();
 }
 //"sn|amount|topic/sn"
@@ -1756,6 +1803,7 @@ void app_handle_qrpay(u32 button) {
 	trans_thread_mutexLock();
 	if (atoi(amount) != 0 && button_length > 0)
 	{
+		current_mode = MODE_TRANS_DQR;
 		app_dsp_play(APP_AUDIO_PLAY, "/ext/audio/english/dsp_qrcodescan.wav", "Please scan qr code", 0);
 		OsSegShowMoney(g_dynamic_amountFormat);
 		pack_qr_data(buff,amount);
@@ -1764,32 +1812,32 @@ void app_handle_qrpay(u32 button) {
 		memset(previous_amount, 0, sizeof(previous_amount));
 		memset(&point, 0, sizeof(point));
 		button_length = 0;
+		start_timeout_check(APP_DISP_TIMEOUT);
 	}
 	trans_thread_mutexUnlock();
 }
 
 void app_handle_cardpay(u32 button) { 
 	trans_thread_mutexLock();
-	if (current_mode == MODE_PLUS)
+	current_mode = MODE_TRANS_CARDPAY;
+	if (atoi(amount) != 0 && atoi(previous_amount) != 0)
 	{
-		if (atoi(amount) != 0 && atoi(previous_amount) != 0)
-		{
-			sprintf(amount, "%d", atoi(amount) + atoi(previous_amount));
-		}
-		else
-		{
-			memcpy(amount, previous_amount, strlen(previous_amount));
-		}
-		memset(g_dynamic_amountFormat, 0, sizeof(g_dynamic_amountFormat));
-		app_amount_formatting(amount, g_dynamic_amountFormat); // 111->1.11
-		button_length = strlen(amount);
+		sprintf(amount, "%d", atoi(amount) + atoi(previous_amount));
 	}
+	else
+	{
+		memcpy(amount, previous_amount, strlen(previous_amount));
+	}
+	memset(g_dynamic_amountFormat, 0, sizeof(g_dynamic_amountFormat));
+	app_amount_formatting(amount, g_dynamic_amountFormat); // 111->1.11
+	button_length = strlen(amount);
+
 	if (atoi(amount) != 0 && button_length > 0)
 	{
 		app_dsp_play(APP_AUDIO_PLAY, "/ext/audio/english/dsp_presentcard.wav", "Please present your card", 0);
 		gTransThreadFlag = true;
 		OsSegShowMoney(g_dynamic_amountFormat);
-		strcpy(cardpayamount, g_dynamic_amountFormat);
+		strcpy(cardpayamount, amount);
 		memset(amount, 0, sizeof(amount));
 		memset(previous_amount, 0, sizeof(previous_amount));
 		memset(&point, 0, sizeof(point));
@@ -1808,4 +1856,40 @@ void  disp_main_menu()
 	app_lvgl_menuShow("Menu", menuItems, sizeof(menuItems) / sizeof(menuItems[0]));
 	trans_thread_mutexUnlock();
 	current_mode = MODE_MENU;
+}
+void app_disp_timeout_task(void *param);
+
+void start_timeout_check(int timeout)
+{
+	g_app_disp_timeout = timeout;
+	gAppDspTimeoutThreadFlag = true;
+	g_app_disp_timeout_flag = false;
+	OsSysThreadCreate(app_disp_timeout_task, "app_disp_timeout_task", 1024*2, NULL, API_PRIORITY_NORMAL-4,&thread_timeoutID);
+}
+void stop_timeout_check()
+{
+	gAppDspTimeoutThreadFlag = false;
+	g_app_disp_timeout_flag = true;
+}
+void app_disp_timeout_task(void *param)
+{
+	int i = 0;
+	while(gAppDspTimeoutThreadFlag)
+	{
+
+		for ( i = 0; i < g_app_disp_timeout*5; i++)
+		{
+			if(g_app_disp_timeout_flag == false)
+				OsSysMsleep(200);
+			else
+				break;	
+		}
+		if(current_mode == MODE_TRANS_DQR && g_app_disp_timeout_flag == false)
+		{
+			handle_menu(-1);
+		}
+
+	}
+
+	OsSysThreadDelete(thread_timeoutID);
 }
