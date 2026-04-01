@@ -98,7 +98,7 @@ endif()
   
 
 file(GLOB LIB_FILE_NAME ${CMAKE_SOURCE_DIR}/dspread/libDS50.a)
-file(GLOB LIB_EMV_KERNEL_INS_FILE_NAME ${CMAKE_SOURCE_DIR}/dspread/libEmvKernelIns.a)
+file(GLOB LIB_EMV_KERNEL_INS_FILE_NAME ${CMAKE_SOURCE_DIR}/dspread/libSDK.a)
 
 file(GLOB LIB_EMV_KERNEL_FILE_NAME ${CMAKE_SOURCE_DIR}/dspread/emv/libkernel.a)
 file(GLOB LIB_EMV_L2_FILE_NAME ${CMAKE_SOURCE_DIR}/dspread/emv/libemvl2.a)

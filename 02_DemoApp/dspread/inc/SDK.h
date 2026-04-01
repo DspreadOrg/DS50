@@ -60,7 +60,7 @@ typedef struct _Node
 	unsigned short nDataLen;
 }*LNode, *LinkList;
 
- 
+ extern void getSDKVer(unsigned ver);
 #endif
 
 
